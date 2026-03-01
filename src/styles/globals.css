@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  /* Tema dark premium: preto, cinza, vermelho */
+  --color-brand: #b91c1c;
+  --color-brand-light: #dc2626;
+  --color-surface: #0a0a0a;
+  --color-surface-elevated: #171717;
+  --color-muted: #737373;
+  --color-border: #262626;
+}
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply bg-[var(--color-surface)] text-gray-100 antialiased;
+  }
+}
