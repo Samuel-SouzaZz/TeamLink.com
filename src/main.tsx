@@ -4,7 +4,6 @@ import { ThemeProvider } from 'styled-components'
 import { App } from './App'
 import { theme } from './styles/theme'
 import { GlobalStyle } from './styles/GlobalStyle'
-import './styles/globals.css'
 
 createRoot(document.getElementById('app')!).render(
   <StrictMode>

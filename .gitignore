@@ -12,10 +12,23 @@ dist
 dist-ssr
 *.local
 
-# Editor directories and files
+# Variáveis de ambiente (nunca fazer commit de chaves ou segredos)
+.env
+.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Chaves e certificados
+*.pem
+*.key
+
+# Editor e IDE
 .vscode/*
 !.vscode/extensions.json
 .idea
+.cursor
 .DS_Store
 *.suo
 *.ntvs*
