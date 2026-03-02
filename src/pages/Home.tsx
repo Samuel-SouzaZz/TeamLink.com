@@ -2,6 +2,8 @@ import { openWhatsApp } from '../services/whatsapp'
 import { links } from '../data/site'
 import { GallerySection } from '../sections/GallerySection'
 import { HeroSection } from '../sections/HeroSection'
+import { AboutPreviewSection } from '../sections/AboutPreviewSection'
+import { FemaleClassSection } from '../sections/FemaleClassSection'
 import { Button } from '../components/ui/Button'
 import { MessageCircle } from 'lucide-react'
 import styled from 'styled-components'
@@ -16,34 +18,6 @@ const AboutBlock = styled.div`
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-`
-
-const AboutSectionWrap = styled.section`
-  padding: ${({ theme }) => theme.spacing['2xl']} ${({ theme }) => theme.spacing.md};
-  background-color: ${({ theme }) => theme.colors.surfaceElevated};
-`
-
-const AboutBlockInner = styled.div`
-  max-width: 48rem;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-  padding-top: ${({ theme }) => theme.spacing.xl};
-  padding-bottom: ${({ theme }) => theme.spacing.xl};
-
-  &:first-of-type {
-    padding-top: 0;
-  }
-`
-
-const Divider = styled.hr`
-  border: none;
-  height: 1px;
-  background-color: ${({ theme }) => theme.colors.border};
-  margin: 0;
-  max-width: 24rem;
-  margin-left: auto;
-  margin-right: auto;
 `
 
 const SectionTitleStyled = styled.h2`
@@ -65,7 +39,7 @@ const CtaBlock = styled.div`
 `
 
 /**
- * Home — Compõe seções. Hero + Sobre + Galeria (id="galeria") + Depoimentos + CTA final.
+ * Home — Compõe seções. Hero + Sobre (preview) + Turma Feminina + Depoimentos + Galeria + CTA final.
  */
 export function Home() {
   const handleCta = () => openWhatsApp(links.whatsapp.href)
@@ -74,19 +48,11 @@ export function Home() {
     <>
       <HeroSection />
 
-      <AboutSectionWrap>
-        <AboutBlockInner>
-          <SectionTitleStyled>Sobre</SectionTitleStyled>
-          <SectionText>
-            Treinos de Muay Thai com foco na turma feminina. Team Link.
-          </SectionText>
-        </AboutBlockInner>
-        <Divider aria-hidden />
-        <AboutBlockInner>
-          <SectionTitleStyled>Turma Feminina</SectionTitleStyled>
-          <SectionText>Espaço dedicado às mulheres no tatame.</SectionText>
-        </AboutBlockInner>
-      </AboutSectionWrap>
+      {/* Seção Sobre — fundo escuro, título, linha decorativa, subtítulo, botão "Saiba mais" → /sobre */}
+      <AboutPreviewSection />
+
+      {/* Seção Turma Feminina — duas colunas (imagem + conteúdo), chips, botão "Conheça a turma" → /contato */}
+      <FemaleClassSection />
 
       <Section>
         <AboutBlock>
