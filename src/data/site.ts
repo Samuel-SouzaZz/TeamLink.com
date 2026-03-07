@@ -10,17 +10,17 @@ export const SLOGAN = 'Sua melhor versão começa no tatame.'
 export const links = {
   whatsapp: {
     label: 'WhatsApp',
-    href: 'https://wa.me/5511999999999', // substituir pelo número real
+    href: 'https://wa.me/5532984583098',
     ariaLabel: 'Abrir conversa no WhatsApp',
   },
   instagram: {
     label: 'Instagram',
-    href: 'https://instagram.com/karolmuaythai', // substituir pelo @ real
+    href: 'https://www.instagram.com/karolcascelli',
     ariaLabel: 'Abrir perfil no Instagram',
   },
   tiktok: {
     label: 'TikTok',
-    href: 'https://www.tiktok.com/@karolmuaythai', // substituir pelo @ real
+    href: 'https://www.tiktok.com/@karolcascelli',
     ariaLabel: 'Abrir perfil no TikTok',
   },
 } as const
