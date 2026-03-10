@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import styled from 'styled-components'
-import type { GalleryItem } from '../types/gallery'
-import { galleryItems } from '../data/gallery'
+
 import { LightboxModal } from '../components/LightboxModal'
-import { Container } from '../components/ui/Container'
-import { SectionTitle } from '../components/ui/SectionTitle'
+import { Container, SectionTitle } from '../components/ui'
+import { galleryItems } from '../data/gallery'
 
 const Section = styled.section`
   padding: ${({ theme }) => theme.spacing.xl} ${({ theme }) => theme.spacing.md};
@@ -35,7 +34,10 @@ const ImageButton = styled.button`
   padding: 0;
   cursor: pointer;
   position: relative;
-  &:focus-visible { outline: 2px solid ${({ theme }) => theme.colors.brand}; outline-offset: 2px; }
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.brand};
+    outline-offset: 2px;
+  }
 `
 
 const ImageInner = styled.span`
@@ -50,45 +52,38 @@ const Thumb = styled.img`
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s;
+  @media (prefers-reduced-motion: reduce) { transition: none; }
+  ${ImageButton}:hover & { transform: scale(1.07); }
   @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-  ${ImageButton}:hover & {
-    transform: scale(1.1);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    ${ImageButton}:hover & {
-      transform: none;
-    }
+    ${ImageButton}:hover & { transform: none; }
   }
 `
 
-const Overlay = styled.span`
+const ThumbOverlay = styled.span`
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.35);
   opacity: 0;
-  transition: opacity 0.3s;
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  transition: opacity 0.25s;
+  @media (prefers-reduced-motion: reduce) { transition: none; }
   ${ImageButton}:hover & { opacity: 1; }
 `
 
 export function GallerySection() {
-  const [lightboxItem, setLightboxItem] = useState<GalleryItem | null>(null)
+  const [lightboxIndex, setLightboxIndex] = useState(-1)
 
   return (
     <Section id="galeria" aria-labelledby="gallery-heading">
       <Container>
         <SectionTitle title="Galeria" id="gallery-heading" />
         <Grid>
-          {galleryItems.map((item) => (
+          {galleryItems.map((item, idx) => (
             <GridItem key={item.id}>
-              <ImageButton type="button" onClick={() => setLightboxItem(item)}>
+              <ImageButton
+                type="button"
+                aria-label={`Abrir foto: ${item.alt}`}
+                onClick={() => setLightboxIndex(idx)}
+              >
                 <ImageInner>
                   <Thumb
                     src={item.src}
@@ -97,14 +92,19 @@ export function GallerySection() {
                     width={400}
                     height={300}
                   />
-                  <Overlay aria-hidden />
+                  <ThumbOverlay aria-hidden />
                 </ImageInner>
               </ImageButton>
             </GridItem>
           ))}
         </Grid>
       </Container>
-      <LightboxModal item={lightboxItem} onClose={() => setLightboxItem(null)} />
+
+      <LightboxModal
+        index={lightboxIndex}
+        allItems={galleryItems}
+        onClose={() => setLightboxIndex(-1)}
+      />
     </Section>
   )
 }

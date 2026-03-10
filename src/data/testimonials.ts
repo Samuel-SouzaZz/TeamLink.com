@@ -1,15 +1,4 @@
-/**
- * Depoimentos — dados estáticos para a seção de depoimentos na página Sobre.
- * Troque textos e adicione/remova itens conforme depoimentos reais.
- */
-
-export interface Testimonial {
-  id: string
-  name: string
-  since: string
-  text: string
-  rating: number
-}
+import type { Testimonial } from '../types'
 
 export const testimonials: Testimonial[] = [
   {

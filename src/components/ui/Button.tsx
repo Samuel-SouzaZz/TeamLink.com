@@ -1,10 +1,11 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import styled from 'styled-components'
 import type { LucideIcon } from 'lucide-react'
-import { clsx } from 'clsx'
 
 type ButtonVariant = 'primary' | 'secondary' | 'ghost'
 type ButtonSize = 'sm' | 'md' | 'lg'
+
+const ICON_SIZE: Record<ButtonSize, number> = { sm: 16, md: 18, lg: 22 }
 
 const StyledButton = styled.button<{
   $variant: ButtonVariant
@@ -24,52 +25,40 @@ const StyledButton = styled.button<{
 
   ${({ $size, theme }) =>
     $size === 'sm' &&
-    `
-    padding: ${theme.spacing.xs} ${theme.spacing.md};
-    font-size: ${theme.typography.size.sm};
-  `}
+    `padding: ${theme.spacing.xs} ${theme.spacing.md}; font-size: ${theme.typography.size.sm};`}
   ${({ $size, theme }) =>
     $size === 'md' &&
-    `
-    padding: ${theme.spacing.sm} ${theme.spacing.md};
-    font-size: ${theme.typography.size.base};
-  `}
+    `padding: ${theme.spacing.sm} ${theme.spacing.md}; font-size: ${theme.typography.size.base};`}
   ${({ $size, theme }) =>
     $size === 'lg' &&
-    `
-    padding: ${theme.spacing.md} ${theme.spacing.lg};
-    font-size: ${theme.typography.size.lg};
-  `}
+    `padding: ${theme.spacing.md} ${theme.spacing.lg}; font-size: ${theme.typography.size.lg};`}
 
   ${({ $variant, theme }) =>
     $variant === 'primary' &&
-    `
-    background-color: ${theme.colors.brand};
-    color: white;
-    &:hover { background-color: ${theme.colors.brandLight}; }
-  `}
+    `background-color: ${theme.colors.brand}; color: white;
+     &:hover { background-color: ${theme.colors.brandLight}; }`}
   ${({ $variant, theme }) =>
     $variant === 'secondary' &&
-    `
-    background-color: ${theme.colors.surfaceElevated};
-    color: ${theme.colors.textMuted};
-    border: 1px solid ${theme.colors.border};
-    &:hover { color: ${theme.colors.text}; background-color: rgba(255,255,255,0.05); }
-  `}
+    `background-color: ${theme.colors.surfaceElevated}; color: ${theme.colors.textMuted};
+     border: 1px solid ${theme.colors.border};
+     &:hover { color: ${theme.colors.text}; background-color: rgba(255,255,255,0.05); }`}
   ${({ $variant, theme }) =>
     $variant === 'ghost' &&
-    `
-    background-color: transparent;
-    color: ${theme.colors.textMuted};
-    border: 1px solid ${theme.colors.border};
-    &:hover { color: ${theme.colors.text}; background-color: rgba(255,255,255,0.05); }
-  `}
+    `background-color: transparent; color: ${theme.colors.textMuted};
+     border: 1px solid ${theme.colors.border};
+     &:hover { color: ${theme.colors.text}; background-color: rgba(255,255,255,0.05); }`}
 
   ${({ $fullWidth }) => $fullWidth && 'width: 100%;'}
 
   &:focus-visible {
     outline: 2px solid ${({ theme }) => theme.colors.brand};
     outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
   }
 `
 
@@ -92,18 +81,19 @@ export function Button({
   children,
   ...props
 }: ButtonProps) {
+  const iconSize = ICON_SIZE[size]
   return (
     <StyledButton
       type="button"
       $variant={variant}
       $size={size}
       $fullWidth={fullWidth}
-      className={clsx(className)}
+      className={className}
       {...props}
     >
-      {LeftIcon && <LeftIcon size={size === 'sm' ? 16 : size === 'lg' ? 22 : 18} strokeWidth={2} aria-hidden />}
+      {LeftIcon && <LeftIcon size={iconSize} strokeWidth={2} aria-hidden />}
       {children}
-      {RightIcon && <RightIcon size={size === 'sm' ? 16 : size === 'lg' ? 22 : 18} strokeWidth={2} aria-hidden />}
+      {RightIcon && <RightIcon size={iconSize} strokeWidth={2} aria-hidden />}
     </StyledButton>
   )
 }

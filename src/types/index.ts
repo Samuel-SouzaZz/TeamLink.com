@@ -1,7 +1,3 @@
-/**
- * Model / Types layer — DTOs e interfaces do domínio
- */
-
 export interface NavItem {
   label: string
   href: string
@@ -13,18 +9,10 @@ export interface Link {
   ariaLabel?: string
 }
 
-export interface GalleryItem {
-  id: string
-  src: string
-  alt: string
-  category: string
-  title?: string
-}
-
 export interface Testimonial {
   id: string
   name: string
-  role?: string
+  since: string
   text: string
-  avatar?: string
+  rating: number
 }

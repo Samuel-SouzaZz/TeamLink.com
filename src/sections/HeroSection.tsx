@@ -1,10 +1,11 @@
 import styled from 'styled-components'
 import { MessageCircle } from 'lucide-react'
+
 import { openWhatsApp } from '../services/whatsapp'
-import { links, SLOGAN } from '../data/site'
 import { Button } from '../components/ui/Button'
 import { heroMain } from '../assets/hero'
 import { logoTransparent } from '../assets/Logo'
+import { links, SLOGAN } from '../data/site'
 
 const HeroWrap = styled.section`
   position: relative;
@@ -18,6 +19,7 @@ const HeroWrap = styled.section`
   padding-bottom: ${({ theme }) => theme.spacing.xl};
   text-align: center;
   overflow: hidden;
+  background-color: ${({ theme }) => theme.colors.surface};
 
   @media (min-width: 768px) {
     min-height: 70vh;
@@ -27,15 +29,14 @@ const HeroWrap = styled.section`
   }
 `
 
-const HeroBg = styled.div<{ $src: string }>`
+const HeroBg = styled.img`
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-color: ${({ theme }) => theme.colors.surface};
-  background-image: url(${({ $src }) => $src});
-  background-size: cover;
-  background-position: top center;
-  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
 `
 
 const HeroOverlay = styled.div`
@@ -68,9 +69,13 @@ const HeroLogo = styled.img`
   object-fit: contain;
   margin-bottom: ${({ theme }) => theme.spacing.md};
   display: block;
+  margin-left: auto;
+  margin-right: auto;
+
   @media (min-width: 768px) {
     height: 4rem;
     margin-bottom: ${({ theme }) => theme.spacing.lg};
+    margin-left: 0;
   }
 `
 
@@ -153,10 +158,26 @@ export function HeroSection() {
 
   return (
     <HeroWrap>
-      <HeroBg $src={heroMain} aria-hidden />
+      <HeroBg
+        src={heroMain}
+        alt=""
+        aria-hidden
+        fetchPriority="high"
+        loading="eager"
+        decoding="async"
+        width={1920}
+        height={1080}
+      />
       <HeroOverlay aria-hidden />
       <HeroContent>
-        <HeroLogo src={logoTransparent} alt="" aria-hidden />
+        <HeroLogo
+          src={logoTransparent}
+          alt="Team Link"
+          width={160}
+          height={64}
+          loading="eager"
+          decoding="async"
+        />
         <HeroTitle>Karol Casceli</HeroTitle>
         <HeroSubtitle>{SLOGAN}</HeroSubtitle>
         <Chips>

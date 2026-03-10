@@ -1,17 +1,14 @@
 import styled from 'styled-components'
 import { Calendar } from 'lucide-react'
+
+import { openWhatsApp } from '../services/whatsapp'
 import { Container, Card, Button } from '../components/ui'
 import { RatingStars } from '../components/RatingStars'
+import { gallery2 } from '../assets/gallery'
 import { testimonials } from '../data/testimonials'
-import { openWhatsApp } from '../services/whatsapp'
 import { links } from '../data/site'
 
-/** Placeholder: troque por imagem local (ex.: import from '../assets/depoimentos/...') */
-const TESTIMONIAL_IMAGE =
-  'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80'
-
-const CTA_MESSAGE =
-  'Oi! Quero agendar uma aula experimental com a Karol.'
+const CTA_MESSAGE = 'Oi! Quero agendar uma aula experimental com a Karol.'
 
 const SectionRoot = styled.section`
   padding: ${({ theme }) => theme.spacing['2xl']} ${({ theme }) => theme.spacing.md};
@@ -137,8 +134,11 @@ export function TestimonialsSection() {
 
         <ImageWrapper>
           <Image
-            src={TESTIMONIAL_IMAGE}
+            src={gallery2}
             alt="Turma feminina de Muay Thai em treino — espaço de evolução e respeito."
+            loading="lazy"
+            width={800}
+            height={600}
           />
         </ImageWrapper>
 

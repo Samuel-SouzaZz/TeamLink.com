@@ -116,6 +116,10 @@ export function FemaleClassSection() {
           <Image
             src={sobreImage}
             alt="Treino de Muay Thai na turma feminina — espaço dedicado às mulheres no tatame."
+            loading="lazy"
+            width={800}
+            height={600}
+            decoding="async"
           />
         </ImageWrapper>
         <Content>

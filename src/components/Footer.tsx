@@ -1,6 +1,6 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { MessageCircle, Instagram } from 'lucide-react'
-import { Link } from 'react-router-dom'
 import { openWhatsApp } from '../services/whatsapp'
 import { links, SLOGAN } from '../data/site'
 import { Container } from './ui/Container'
