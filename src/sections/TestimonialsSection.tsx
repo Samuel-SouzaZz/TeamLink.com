@@ -81,6 +81,31 @@ const CardsColumn = styled.div`
 
 const TestimonialCard = styled(Card)`
   flex: 0 0 auto;
+  position: relative;
+  padding-top: ${({ theme }) => theme.spacing.xl};
+`
+
+const QuoteMark = styled.span`
+  position: absolute;
+  top: ${({ theme }) => theme.spacing.sm};
+  left: ${({ theme }) => theme.spacing.md};
+  font-size: 3.5rem;
+  line-height: 1;
+  color: ${({ theme }) => theme.colors.brand};
+  font-family: Georgia, serif;
+  user-select: none;
+  pointer-events: none;
+  opacity: 0.7;
+`
+
+const TestimonialText = styled.p`
+  margin: 0 0 ${({ theme }) => theme.spacing.md};
+  font-size: ${({ theme }) => theme.typography.size.sm};
+  line-height: 1.7;
+  color: ${({ theme }) => theme.colors.textMuted};
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-line;
 `
 
 const TestimonialMeta = styled.div`
@@ -88,7 +113,8 @@ const TestimonialMeta = styled.div`
   align-items: center;
   flex-wrap: wrap;
   gap: ${({ theme }) => theme.spacing.sm};
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
+  padding-top: ${({ theme }) => theme.spacing.sm};
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
 `
 
 const TestimonialName = styled.span`
@@ -100,15 +126,6 @@ const TestimonialName = styled.span`
 const TestimonialSince = styled.span`
   font-size: ${({ theme }) => theme.typography.size.sm};
   color: ${({ theme }) => theme.colors.textMuted};
-`
-
-const TestimonialText = styled.p`
-  margin: 0;
-  font-size: ${({ theme }) => theme.typography.size.sm};
-  line-height: 1.6;
-  color: ${({ theme }) => theme.colors.textMuted};
-  word-wrap: break-word;
-  overflow-wrap: break-word;
 `
 
 const CtaWrap = styled.div`
@@ -145,12 +162,15 @@ export function TestimonialsSection() {
         <CardsColumn>
           {testimonials.map((t) => (
             <TestimonialCard key={t.id}>
+              <QuoteMark aria-hidden>"</QuoteMark>
+              <TestimonialText>{t.text}</TestimonialText>
               <TestimonialMeta>
                 <RatingStars rating={t.rating} size={16} aria-label={`${t.rating} estrelas`} />
                 <TestimonialName>{t.name}</TestimonialName>
-                <TestimonialSince>Aluna desde {t.since}</TestimonialSince>
+                {t.since && (
+                  <TestimonialSince>Aluna desde {t.since}</TestimonialSince>
+                )}
               </TestimonialMeta>
-              <TestimonialText>{t.text}</TestimonialText>
             </TestimonialCard>
           ))}
         </CardsColumn>

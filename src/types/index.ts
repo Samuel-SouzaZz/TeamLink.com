@@ -12,7 +12,7 @@ export interface Link {
 export interface Testimonial {
   id: string
   name: string
-  since: string
+  since?: string
   text: string
   rating: number
 }
