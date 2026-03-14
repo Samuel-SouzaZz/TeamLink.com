@@ -4,7 +4,7 @@ import { Calendar } from 'lucide-react'
 import { openWhatsApp } from '../services/whatsapp'
 import { Container, Card, Button } from '../components/ui'
 import { RatingStars } from '../components/RatingStars'
-import { gallery2 } from '../assets/gallery'
+import testimonialImg from '../assets/gallery/WhatsApp Image 2026-02-28 at 17.38.25 (1).jpeg'
 import { testimonials } from '../data/testimonials'
 import { links } from '../data/site'
 
@@ -134,7 +134,7 @@ export function TestimonialsSection() {
 
         <ImageWrapper>
           <Image
-            src={gallery2}
+            src={testimonialImg}
             alt="Turma feminina de Muay Thai em treino — espaço de evolução e respeito."
             loading="lazy"
             width={800}
