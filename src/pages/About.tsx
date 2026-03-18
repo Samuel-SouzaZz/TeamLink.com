@@ -12,14 +12,14 @@ import { links, SLOGAN } from '../data/site'
 import { TestimonialsSection } from '../sections/TestimonialsSection'
 
 /* ---- Dados estáticos ---- */
-const PAGE_TITLE = 'Sobre a Karol Casceli'
+const PAGE_TITLE = 'Sobre a Karol Cascelli'
 const PAGE_SUBTITLE = SLOGAN
 const CTA_MESSAGE =
-  'Oi! Quero agendar uma aula experimental de Muay Thai com a Karol Casceli.'
+  'Oi! Quero agendar uma aula experimental de Muay Thai com a Karol Cascelli.'
 const CTA_TEXT_SHORT = 'Agende uma aula experimental e venha sentir a energia da turma.'
 
 const HISTORIA_TEXT =
-  'Karol Casceli iniciou sua trajetória no Muay Thai em 2015. Com disciplina e consistência, evoluiu dentro do tatame até alcançar a graduação verde e branco. Hoje, assume a liderança da turma feminina de Muay Thai, formando mulheres mais fortes — no físico, na mente e na confiança — dentro e fora da academia.'
+  'Karol Cascelli iniciou sua trajetória no Muay Thai em 2015. Com disciplina e consistência, evoluiu dentro do tatame até alcançar a graduação verde e branco. Hoje, assume a liderança da turma feminina de Muay Thai, formando mulheres mais fortes — no físico, na mente e na confiança — dentro e fora da academia.'
 
 const HISTORIA_CHIPS = ['Desde 2015', 'Graduação verde e branco', 'Turma feminina'] as const
 

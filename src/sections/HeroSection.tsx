@@ -178,7 +178,7 @@ export function HeroSection() {
           loading="eager"
           decoding="async"
         />
-        <HeroTitle>Karol Casceli</HeroTitle>
+        <HeroTitle>Karol Cascelli</HeroTitle>
         <HeroSubtitle>{SLOGAN}</HeroSubtitle>
         <Chips>
           {CHIPS.map((label) => (

@@ -121,9 +121,9 @@ const CtaBlock = styled.div`
 
 /* ---- Constantes de texto (personalizar aqui) ---- */
 const PAGE_TITLE = 'Contato'
-const PAGE_SUBTITLE = 'Fale com a Karol Casceli e agende sua aula experimental.'
+const PAGE_SUBTITLE = 'Fale com a Karol Cascelli e agende sua aula experimental.'
 const WHATSAPP_MESSAGE = 'Oi! Gostaria de agendar uma aula experimental de Muay Thai.'
-const CTA_MESSAGE = 'Oi! Quero agendar uma aula experimental de Muay Thai com a Karol Casceli.'
+const CTA_MESSAGE = 'Oi! Quero agendar uma aula experimental de Muay Thai com a Karol Cascelli.'
 const ADDRESS_TEXT = 'Team Link — Rua Virgínia Napoleão, Nº 39, Napoleão — 2º andar'
 const HOURS_TEXT = 'Terças e quintas às 19h'
 const CTA_HEADING = 'Venha treinar'
