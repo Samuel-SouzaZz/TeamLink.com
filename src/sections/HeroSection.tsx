@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Images } from 'lucide-react'
 import { WhatsAppIcon } from '../components/icons/WhatsAppIcon'
 
 import { openWhatsApp } from '../services/whatsapp'
@@ -148,6 +149,50 @@ const CtaGroup = styled.div`
   }
 `
 
+const GlassBtn = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #ffffff;
+  font-size: ${({ theme }) => theme.typography.size.base};
+  font-weight: ${({ theme }) => theme.typography.weight.medium};
+  padding: 14px 20px;
+  border-radius: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s ease;
+
+  /* herda largura do CtaGroup em mobile */
+  width: 100%;
+  max-width: 320px;
+
+  @media (min-width: 768px) {
+    width: auto;
+    max-width: none;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.38);
+      transform: translateY(-2px);
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
+    background: rgba(255, 255, 255, 0.1);
+  }
+`
+
 const CHIPS = ['Turma Feminina', 'Desde 2015', 'Team Link'] as const
 
 export function HeroSection() {
@@ -195,14 +240,10 @@ export function HeroSection() {
           >
             Agendar aula experimental
           </Button>
-          <Button
-            variant="ghost"
-            size="lg"
-            onClick={handleVerGaleria}
-            aria-label="Rolar até a seção Galeria"
-          >
+          <GlassBtn onClick={handleVerGaleria} aria-label="Rolar até a seção Galeria">
+            <Images size={18} strokeWidth={2} aria-hidden />
             Ver galeria
-          </Button>
+          </GlassBtn>
         </CtaGroup>
       </HeroContent>
     </HeroWrap>
