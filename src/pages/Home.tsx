@@ -6,6 +6,7 @@ import { Button } from '../components/ui'
 import {
   HeroSection,
   AboutPreviewSection,
+  ContactSection,
   FemaleClassSection,
   TestimonialsSection,
   GallerySection,
@@ -48,6 +49,7 @@ export function Home() {
     <>
       <HeroSection />
       <AboutPreviewSection />
+      <ContactSection />
       <FemaleClassSection />
       <TestimonialsSection />
       <GallerySection />
