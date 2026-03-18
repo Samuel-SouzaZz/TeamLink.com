@@ -15,4 +15,11 @@ export const testimonials: Testimonial[] = [
     text: 'Karoooll, quero deixar registrada minha gratidão pelas aulas de Muay Thai.\n\nSua paciência e habilidade para ensinar são seu diferencial e fazem toda a diferença no aprendizado. Você sempre incentiva a gente a evoluir, respeitando o tempo de cada uma.\n\nAlém da parte técnica, o ambiente que você cria nas aulas é incrível. Treinar em um espaço pensado só para mulheres faz com que eu me sinta muito mais à vontade, confiante e motivada a continuar. É um momento que não é só de treino, mas também de cuidado comigo mesma.\n\nObrigada por toda dedicação, pela energia nas aulas e por compartilhar seu conhecimento com tanta generosidade. É muito bom poder aprender com você. 🥊✨',
     rating: 5,
   },
+  {
+    id: '3',
+    name: 'Isabella Macedo',
+    since: 'Janeiro de 2025',
+    text: 'Boa tarde!\n\nKarol, passando para agradecer pelo carinho e incentivo nas aulas.\n\nMe sinto mais motivada a cada treino; sua atenção e dedicação com a turma fazem toda diferença.',
+    rating: 5,
+  },
 ]
