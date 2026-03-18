@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import { MessageCircle, Instagram, MapPin, Calendar } from 'lucide-react'
+import { Instagram, MapPin, Calendar, Clock } from 'lucide-react'
+
 import { Container } from '../components/ui/Container'
 import { SectionTitle } from '../components/ui/SectionTitle'
 import { Card } from '../components/ui/Card'
@@ -7,8 +8,9 @@ import { Button } from '../components/ui/Button'
 import { openWhatsApp } from '../services/whatsapp'
 import { links } from '../data/site'
 import { TiktokIcon } from '../components/icons/TiktokIcon'
+import { WhatsAppIcon } from '../components/icons/WhatsAppIcon'
 
-/* ---- Wrappers ---- */
+/* ---- Layout ---- */
 const ContactRoot = styled.main`
   padding-top: ${({ theme }) => theme.layout.navbarHeight};
   padding-bottom: ${({ theme }) => theme.spacing['2xl']};
@@ -21,19 +23,77 @@ const Section = styled.section`
   padding-bottom: ${({ theme }) => theme.spacing.xl};
 `
 
+/* Card do WhatsApp em destaque — ocupa linha inteira no mobile e desktop */
+const WhatsAppHighlight = styled.div`
+  background: linear-gradient(
+    135deg,
+    rgba(37, 211, 102, 0.12) 0%,
+    rgba(37, 211, 102, 0.04) 100%
+  );
+  border: 1px solid rgba(37, 211, 102, 0.3);
+  border-radius: ${({ theme }) => theme.radius.lg};
+  padding: ${({ theme }) => theme.spacing.xl};
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: ${({ theme }) => theme.spacing.md};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: ${({ theme }) => theme.spacing.xl};
+  }
+`
+
+const WhatsAppLeft = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.md};
+`
+
+const WhatsAppIconWrap = styled.div`
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: ${({ theme }) => theme.radius.full};
+  background-color: #25d366;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+`
+
+const WhatsAppInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+`
+
+const WhatsAppLabel = styled.span`
+  font-size: ${({ theme }) => theme.typography.size.sm};
+  color: ${({ theme }) => theme.colors.textMuted};
+`
+
+const WhatsAppNumber = styled.span`
+  font-size: clamp(1.25rem, 3vw, 1.625rem);
+  font-weight: ${({ theme }) => theme.typography.weight.bold};
+  color: ${({ theme }) => theme.colors.text};
+  letter-spacing: 0.01em;
+`
+
+/* Grid dos outros cards */
 const Grid = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   gap: ${({ theme }) => theme.spacing.lg};
-  margin-top: ${({ theme }) => theme.spacing.lg};
   @media (min-width: 640px) {
     grid-template-columns: repeat(2, 1fr);
   }
   @media (min-width: 1024px) {
     grid-template-columns: repeat(3, 1fr);
-  }
-  @media (min-width: 1280px) {
-    grid-template-columns: repeat(4, 1fr);
   }
 `
 
@@ -75,6 +135,9 @@ const CardText = styled.p`
 const CardTextSmall = styled(CardText)`
   font-size: 0.8125rem;
   color: ${({ theme }) => theme.colors.muted};
+  display: flex;
+  align-items: center;
+  gap: 4px;
 `
 
 const CardActions = styled.div`
@@ -115,22 +178,19 @@ const CtaText = styled.p`
   color: ${({ theme }) => theme.colors.textMuted};
 `
 
-const CtaBlock = styled.div`
-  margin-top: ${({ theme }) => theme.spacing.md};
-`
-
-/* ---- Constantes de texto (personalizar aqui) ---- */
+/* ---- Constantes ---- */
 const PAGE_TITLE = 'Contato'
 const PAGE_SUBTITLE = 'Fale com a Karol Cascelli e agende sua aula experimental.'
 const WHATSAPP_MESSAGE = 'Oi! Gostaria de agendar uma aula experimental de Muay Thai.'
 const CTA_MESSAGE = 'Oi! Quero agendar uma aula experimental de Muay Thai com a Karol Cascelli.'
-const ADDRESS_TEXT = 'Team Link — Rua Virgínia Napoleão, Nº 39, Napoleão — 2º andar'
+const PHONE_DISPLAY = '(32) 98458-3098'
+const ADDRESS_TEXT = 'Rua Virgínia Napoleão, Nº 39, Napoleão — 2º andar'
 const HOURS_TEXT = 'Terças e quintas às 19h'
 const CTA_HEADING = 'Venha treinar'
 const CTA_DESCRIPTION = 'Reserve seu lugar na turma e venha sentir a energia do Muay Thai.'
 
 export function Contact() {
-  const handleWhatsAppCard = () => openWhatsApp(links.whatsapp.href, WHATSAPP_MESSAGE)
+  const handleWhatsApp = () => openWhatsApp(links.whatsapp.href, WHATSAPP_MESSAGE)
   const handleCta = () => openWhatsApp(links.whatsapp.href, CTA_MESSAGE)
   const handleInstagram = () => window.open(links.instagram.href, '_blank', 'noopener,noreferrer')
   const handleTiktok = () => window.open(links.tiktok.href, '_blank', 'noopener,noreferrer')
@@ -141,31 +201,31 @@ export function Contact() {
         <SectionTitle title={PAGE_TITLE} subtitle={PAGE_SUBTITLE} id="contact-heading" />
 
         <Section>
-          <Grid>
-            {/* Card 1 — WhatsApp */}
-            <ContactCard>
-              <CardHeader>
-                <CardIcon aria-hidden>
-                  <MessageCircle size={24} strokeWidth={2} />
-                </CardIcon>
-                <CardTitle>WhatsApp</CardTitle>
-              </CardHeader>
-              <CardText>Clique e fale direto para agendar seu treino.</CardText>
-              <CardActions>
-                <Button
-                  variant="primary"
-                  size="md"
-                  fullWidth
-                  leftIcon={MessageCircle}
-                  onClick={handleWhatsAppCard}
-                  aria-label={links.whatsapp.ariaLabel}
-                >
-                  Abrir WhatsApp
-                </Button>
-              </CardActions>
-            </ContactCard>
+          {/* WhatsApp em destaque */}
+          <WhatsAppHighlight>
+            <WhatsAppLeft>
+              <WhatsAppIconWrap aria-hidden>
+                <WhatsAppIcon size={28} />
+              </WhatsAppIconWrap>
+              <WhatsAppInfo>
+                <WhatsAppLabel>WhatsApp — Fale diretamente</WhatsAppLabel>
+                <WhatsAppNumber>{PHONE_DISPLAY}</WhatsAppNumber>
+              </WhatsAppInfo>
+            </WhatsAppLeft>
+            <Button
+              variant="primary"
+              size="lg"
+              leftIcon={WhatsAppIcon}
+              onClick={handleWhatsApp}
+              aria-label={links.whatsapp.ariaLabel}
+            >
+              Agendar aula experimental
+            </Button>
+          </WhatsAppHighlight>
 
-            {/* Card 2 — Instagram */}
+          {/* Demais cards */}
+          <Grid>
+            {/* Instagram */}
             <ContactCard>
               <CardHeader>
                 <CardIcon aria-hidden>
@@ -188,7 +248,7 @@ export function Contact() {
               </CardActions>
             </ContactCard>
 
-            {/* Card 3 — TikTok */}
+            {/* TikTok */}
             <ContactCard>
               <CardHeader>
                 <CardIcon aria-hidden>
@@ -210,7 +270,7 @@ export function Contact() {
               </CardActions>
             </ContactCard>
 
-            {/* Card 4 — Localização */}
+            {/* Localização */}
             <ContactCard>
               <CardHeader>
                 <CardIcon aria-hidden>
@@ -219,7 +279,10 @@ export function Contact() {
                 <CardTitle>Localização</CardTitle>
               </CardHeader>
               <CardText>{ADDRESS_TEXT}</CardText>
-              <CardTextSmall>{HOURS_TEXT}</CardTextSmall>
+              <CardTextSmall>
+                <Clock size={12} strokeWidth={2} aria-hidden />
+                {HOURS_TEXT}
+              </CardTextSmall>
               <CardActions>
                 <Button
                   variant="ghost"
@@ -242,17 +305,15 @@ export function Contact() {
           <CtaInner>
             <CtaHeading id="cta">{CTA_HEADING}</CtaHeading>
             <CtaText>{CTA_DESCRIPTION}</CtaText>
-            <CtaBlock>
-              <Button
-                variant="primary"
-                size="lg"
-                leftIcon={Calendar}
-                onClick={handleCta}
-                aria-label="Agendar aula experimental pelo WhatsApp"
-              >
-                Agendar aula experimental
-              </Button>
-            </CtaBlock>
+            <Button
+              variant="primary"
+              size="lg"
+              leftIcon={Calendar}
+              onClick={handleCta}
+              aria-label="Agendar aula experimental pelo WhatsApp"
+            >
+              Agendar aula experimental
+            </Button>
           </CtaInner>
         </CtaSection>
       </Container>

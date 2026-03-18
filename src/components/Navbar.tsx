@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Menu, X, MessageCircle, Instagram } from 'lucide-react'
+import { Menu, X, Instagram } from 'lucide-react'
+import { WhatsAppIcon } from './icons/WhatsAppIcon'
 import { openWhatsApp } from '../services/whatsapp'
 import { navItems, links } from '../data/site'
 import { Container } from './ui/Container'
@@ -236,7 +237,7 @@ export function Navbar() {
             ))}
           </NavList>
           <DesktopCta>
-            <Button variant="primary" size="md" leftIcon={MessageCircle} onClick={handleAgendar}>
+            <Button variant="primary" size="md" leftIcon={WhatsAppIcon} onClick={handleAgendar}>
               Agendar aula
             </Button>
           </DesktopCta>
@@ -278,7 +279,7 @@ export function Navbar() {
                     fullWidth
                     variant="primary"
                     size="md"
-                    leftIcon={MessageCircle}
+                    leftIcon={WhatsAppIcon}
                     onClick={() => {
                       handleAgendar()
                       closeMenu()

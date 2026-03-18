@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { MessageCircle } from 'lucide-react'
+import { WhatsAppIcon } from '../components/icons/WhatsAppIcon'
 
 import { openWhatsApp } from '../services/whatsapp'
 import { Button } from '../components/ui/Button'
@@ -189,7 +189,7 @@ export function HeroSection() {
           <Button
             variant="primary"
             size="lg"
-            leftIcon={MessageCircle}
+            leftIcon={WhatsAppIcon}
             onClick={handleCta}
             aria-label="Agendar aula experimental pelo WhatsApp"
           >

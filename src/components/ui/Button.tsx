@@ -1,6 +1,8 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import type { ButtonHTMLAttributes, ComponentType, ReactNode } from 'react'
 import styled from 'styled-components'
-import type { LucideIcon } from 'lucide-react'
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type IconComponent = ComponentType<any>
 
 type ButtonVariant = 'primary' | 'secondary' | 'ghost'
 type ButtonSize = 'sm' | 'md' | 'lg'
@@ -65,8 +67,8 @@ const StyledButton = styled.button<{
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant
   size?: ButtonSize
-  leftIcon?: LucideIcon
-  rightIcon?: LucideIcon
+  leftIcon?: IconComponent
+  rightIcon?: IconComponent
   fullWidth?: boolean
   children: ReactNode
 }

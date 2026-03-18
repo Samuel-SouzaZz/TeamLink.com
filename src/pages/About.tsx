@@ -1,11 +1,6 @@
 import styled from 'styled-components'
-import {
-  MessageCircle,
-  Award,
-  ShieldCheck,
-  TrendingUp,
-  Target,
-} from 'lucide-react'
+import { Award, ShieldCheck, TrendingUp, Target } from 'lucide-react'
+import { WhatsAppIcon } from '../components/icons/WhatsAppIcon'
 import { Container, SectionTitle, Card, Button } from '../components/ui'
 import { openWhatsApp } from '../services/whatsapp'
 import { links, SLOGAN } from '../data/site'
@@ -278,7 +273,7 @@ export function About() {
           <Button
             variant="primary"
             size="lg"
-            leftIcon={MessageCircle}
+            leftIcon={WhatsAppIcon}
             onClick={handleCta}
             aria-label="Agendar aula experimental pelo WhatsApp"
           >
@@ -364,7 +359,7 @@ export function About() {
             <Button
               variant="primary"
               size="lg"
-              leftIcon={MessageCircle}
+              leftIcon={WhatsAppIcon}
               onClick={handleCta}
               aria-label="Agendar aula experimental pelo WhatsApp"
             >

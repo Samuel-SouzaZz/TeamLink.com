@@ -1,4 +1,4 @@
-import { MessageCircle } from 'lucide-react'
+import { WhatsAppIcon } from '../components/icons/WhatsAppIcon'
 import styled from 'styled-components'
 
 import { openWhatsApp } from '../services/whatsapp'
@@ -56,7 +56,7 @@ export function Home() {
         <CtaInner>
           <CtaHeading>Venha treinar com a gente</CtaHeading>
           <CtaText>Agende uma aula experimental pelo WhatsApp.</CtaText>
-          <Button variant="primary" size="lg" leftIcon={MessageCircle} onClick={handleCta}>
+          <Button variant="primary" size="lg" leftIcon={WhatsAppIcon} onClick={handleCta}>
             Falar no WhatsApp
           </Button>
         </CtaInner>

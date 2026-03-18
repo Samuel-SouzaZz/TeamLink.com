@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import { MessageCircle, Instagram } from 'lucide-react'
+import { Instagram } from 'lucide-react'
+import { WhatsAppIcon } from './icons/WhatsAppIcon'
 import { openWhatsApp } from '../services/whatsapp'
 import { links, SLOGAN } from '../data/site'
 import { Container } from './ui/Container'
@@ -97,7 +98,7 @@ export function Footer() {
           </FooterBrand>
           <Links>
             <FooterLink type="button" onClick={handleWhatsApp} aria-label={links.whatsapp.ariaLabel}>
-              <MessageCircle size={18} strokeWidth={2} aria-hidden />
+              <WhatsAppIcon size={18} />
               {links.whatsapp.label}
             </FooterLink>
             <FooterAnchor href={links.instagram.href} target="_blank" rel="noopener noreferrer" aria-label={links.instagram.ariaLabel}>
