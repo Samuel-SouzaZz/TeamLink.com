@@ -1,9 +1,8 @@
-/**
- * View layer — Seções da Home (Hero, Sobre, Galeria, etc.)
- */
 export { HeroSection } from './HeroSection'
 export { AboutPreviewSection } from './AboutPreviewSection'
-export { ContactSection } from './ContactSection'
-export { FemaleClassSection } from './FemaleClassSection'
-export { GallerySection } from './GallerySection'
+export { ProgramsSection } from './ProgramsSection'
+export { ScheduleSection } from './ScheduleSection'
+export { HistorySection } from './HistorySection'
 export { TestimonialsSection } from './TestimonialsSection'
+export { GallerySection } from './GallerySection'
+export { CtaFinalSection } from './CtaFinalSection'

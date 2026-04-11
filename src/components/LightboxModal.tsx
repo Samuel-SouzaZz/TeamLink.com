@@ -86,7 +86,7 @@ const YarlTheme = createGlobalStyle`
       transform: scale(1.07);
     }
     &:focus-visible {
-      outline: 2px solid #b91c1c;
+      outline: 2px solid #A1122B;
       outline-offset: 2px;
     }
   }
@@ -141,9 +141,9 @@ const YarlTheme = createGlobalStyle`
     opacity: 0.8;
   }
   .yarl__thumbnails_thumbnail_active {
-    border-color: #b91c1c !important;
+    border-color: #A1122B !important;
     opacity: 1;
-    box-shadow: 0 0 0 2px rgba(185, 28, 28, 0.38);
+    box-shadow: 0 0 0 2px rgba(161, 18, 43, 0.38);
   }
 `
 

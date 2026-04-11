@@ -1,375 +1,228 @@
-import { useState } from 'react'
-import * as Dialog from '@radix-ui/react-dialog'
-import styled, { keyframes } from 'styled-components'
-import { Calendar, X, Quote } from 'lucide-react'
+import styled from 'styled-components'
 
-import { openWhatsApp } from '../services/whatsapp'
-import { Container, Card, Button } from '../components/ui'
+import { WhatsAppIcon } from '../components/icons/WhatsAppIcon'
+import { Container } from '../components/ui'
 import { RatingStars } from '../components/RatingStars'
-import testimonialImg from '../assets/gallery/WhatsApp Image 2026-02-28 at 17.38.25 (1).jpeg'
 import { testimonials } from '../data/testimonials'
 import { links } from '../data/site'
-import type { Testimonial } from '../types'
 
-const TRUNCATE_LIMIT = 160
-const CTA_MESSAGE = 'Oi! Quero agendar uma aula experimental com a Karol.'
+const Section = styled.section`
+  padding: 40px 16px;
+  background-color: ${({ theme }) => theme.colors.background};
 
-/* ── Animações ──────────────────────────────────────────────────────── */
-const fadeIn = keyframes`from { opacity: 0; } to { opacity: 1; }`
-const slideUp = keyframes`from { opacity: 0; transform: translate(-50%, -46%) scale(0.97); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); }`
-
-/* ── Seção ──────────────────────────────────────────────────────────── */
-const SectionRoot = styled.section`
-  padding: ${({ theme }) => theme.spacing['2xl']} ${({ theme }) => theme.spacing.md};
-  background-color: ${({ theme }) => theme.colors.surfaceElevated};
-
-  @media (min-width: 640px) {
-    padding: ${({ theme }) => theme.spacing['2xl']} ${({ theme }) => theme.spacing.lg};
+  @media (min-width: 768px) {
+    padding: ${({ theme }) => theme.spacing['2xl']} ${({ theme }) => theme.spacing.md};
   }
 `
 
-const SectionInner = styled(Container)`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: ${({ theme }) => theme.spacing.xl};
-  align-items: start;
-
-  @media (min-width: 1024px) {
-    grid-template-columns: 1fr 1fr;
-    gap: ${({ theme }) => theme.spacing['2xl']};
-  }
-`
-
-const HeadingWrap = styled.div`
-  grid-column: 1 / -1;
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-`
-
-const Heading = styled.h2`
-  margin: 0 0 ${({ theme }) => theme.spacing.sm};
-  font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+const SectionHeading = styled.h2`
+  text-align: center;
+  margin: 0 0 4px;
+  font-family: ${({ theme }) => theme.typography.fontHeading};
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
   font-weight: ${({ theme }) => theme.typography.weight.bold};
   color: ${({ theme }) => theme.colors.text};
-`
+  font-style: italic;
 
-const DecorativeLine = styled.div`
-  width: 4rem;
-  height: 3px;
-  background-color: ${({ theme }) => theme.colors.brand};
-  border-radius: ${({ theme }) => theme.radius.full};
-`
-
-const ImageWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  border-radius: ${({ theme }) => theme.radius.lg};
-  overflow: hidden;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
-
-  @media (min-width: 1024px) {
-    aspect-ratio: 3 / 4;
-    max-height: 420px;
+  @media (min-width: 768px) {
+    margin-bottom: ${({ theme }) => theme.spacing.sm};
   }
 `
 
-const Image = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
+const SectionSub = styled.p`
+  text-align: center;
+  margin: 0 0 24px;
+  font-size: 0.8125rem;
+  color: ${({ theme }) => theme.colors.textMuted};
+
+  @media (min-width: 768px) {
+    margin-bottom: ${({ theme }) => theme.spacing.xl};
+    font-size: ${({ theme }) => theme.typography.size.base};
+  }
 `
 
-const CardsColumn = styled.div`
+const Grid = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.lg};
-  min-width: 0;
+  gap: 12px;
+
+  @media (min-width: 768px) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: ${({ theme }) => theme.spacing.lg};
+  }
 `
 
-/* ── Card ───────────────────────────────────────────────────────────── */
-const TestimonialCard = styled(Card)`
-  flex: 0 0 auto;
-  position: relative;
-  padding-top: calc(${({ theme }) => theme.spacing.xl} + 0.5rem);
-  margin-top: 1rem;
+const Card = styled.div`
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+
+  @media (min-width: 768px) {
+    border-radius: 20px;
+    padding: 28px 24px;
+    gap: 16px;
+
+    &:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+  }
 `
 
-const QuoteBadge = styled.div`
-  position: absolute;
-  top: -1rem;
-  left: ${({ theme }) => theme.spacing.md};
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: ${({ theme }) => theme.radius.md};
-  background-color: ${({ theme }) => theme.colors.brand};
-  box-shadow: 0 4px 12px rgba(185, 28, 28, 0.45);
+const StarsWrap = styled.div`
+  display: flex;
+`
+
+const QuoteText = styled.p`
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: ${({ theme }) => theme.colors.textMuted};
+  flex: 1;
+
+  &::before { content: '\u201C'; }
+  &::after  { content: '\u201D'; }
+
+  @media (min-width: 768px) {
+    font-size: ${({ theme }) => theme.typography.size.sm};
+    line-height: 1.7;
+  }
+`
+
+const AuthorRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+`
+
+const Avatar = styled.div`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, ${({ theme }) => theme.colors.brand}, ${({ theme }) => theme.colors.brandLight});
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
+  font-family: ${({ theme }) => theme.typography.fontHeading};
+  font-weight: ${({ theme }) => theme.typography.weight.bold};
+  font-size: 0.6875rem;
   flex-shrink: 0;
-`
 
-const TestimonialText = styled.p`
-  margin: 0 0 ${({ theme }) => theme.spacing.sm};
-  font-size: ${({ theme }) => theme.typography.size.sm};
-  line-height: 1.7;
-  color: ${({ theme }) => theme.colors.textMuted};
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-`
-
-const ReadMoreBtn = styled.button`
-  background: none;
-  border: none;
-  padding: 0;
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-  font-size: ${({ theme }) => theme.typography.size.sm};
-  font-weight: ${({ theme }) => theme.typography.weight.medium};
-  color: ${({ theme }) => theme.colors.brand};
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  transition: opacity 0.2s;
-
-  &:hover { opacity: 0.75; }
-  &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.colors.brand};
-    outline-offset: 2px;
-    border-radius: 2px;
+  @media (min-width: 768px) {
+    width: 40px;
+    height: 40px;
+    font-size: ${({ theme }) => theme.typography.size.sm};
   }
 `
 
-const TestimonialMeta = styled.div`
+const AuthorInfo = styled.div`
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: ${({ theme }) => theme.spacing.sm};
-  padding-top: ${({ theme }) => theme.spacing.sm};
-  border-top: 1px solid ${({ theme }) => theme.colors.border};
+  flex-direction: column;
 `
 
-const TestimonialName = styled.span`
-  font-weight: ${({ theme }) => theme.typography.weight.medium};
+const AuthorName = styled.span`
+  font-weight: ${({ theme }) => theme.typography.weight.semibold};
   color: ${({ theme }) => theme.colors.text};
-  font-size: ${({ theme }) => theme.typography.size.base};
+  font-size: ${({ theme }) => theme.typography.size.sm};
+
+  @media (min-width: 768px) {
+    font-size: ${({ theme }) => theme.typography.size.base};
+  }
 `
 
-const TestimonialSince = styled.span`
-  font-size: ${({ theme }) => theme.typography.size.sm};
+const AuthorSince = styled.span`
+  font-size: 0.6875rem;
   color: ${({ theme }) => theme.colors.textMuted};
+
+  @media (min-width: 768px) {
+    font-size: ${({ theme }) => theme.typography.size.sm};
+  }
 `
 
 const CtaWrap = styled.div`
-  grid-column: 1 / -1;
   text-align: center;
-  margin-top: ${({ theme }) => theme.spacing.lg};
-`
+  margin-top: 24px;
 
-/* ── Modal (Radix Dialog) ───────────────────────────────────────────── */
-const Overlay = styled(Dialog.Overlay)`
-  position: fixed;
-  inset: 0;
-  z-index: ${({ theme }) => theme.zIndex.overlay};
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
-  animation: ${fadeIn} 0.2s ease-out;
-`
-
-const ModalContent = styled(Dialog.Content)`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  z-index: ${({ theme }) => theme.zIndex.drawer};
-  transform: translate(-50%, -50%);
-  width: min(540px, 92vw);
-  max-height: 85dvh;
-  overflow-y: auto;
-  background-color: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.lg};
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
-  padding: ${({ theme }) => theme.spacing.xl};
-  outline: none;
-  animation: ${slideUp} 0.25s ease-out;
-
-  @media (min-width: 640px) {
-    padding: ${({ theme }) => theme.spacing['2xl']};
+  @media (min-width: 768px) {
+    margin-top: ${({ theme }) => theme.spacing.xl};
   }
 `
 
-const ModalQuoteBadge = styled.div`
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: ${({ theme }) => theme.radius.md};
-  background-color: ${({ theme }) => theme.colors.brand};
-  box-shadow: 0 4px 16px rgba(185, 28, 28, 0.4);
-  display: flex;
+const AccentCta = styled.button`
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-  flex-shrink: 0;
-`
-
-const ModalText = styled.p`
-  margin: 0 0 ${({ theme }) => theme.spacing.lg};
-  font-size: ${({ theme }) => theme.typography.size.base};
-  line-height: 1.75;
-  color: ${({ theme }) => theme.colors.textMuted};
-  white-space: pre-line;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-`
-
-const ModalMeta = styled.div`
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: ${({ theme }) => theme.spacing.sm};
-  padding-top: ${({ theme }) => theme.spacing.md};
-  border-top: 1px solid ${({ theme }) => theme.colors.border};
-`
-
-const ModalName = styled.span`
-  font-weight: ${({ theme }) => theme.typography.weight.medium};
-  color: ${({ theme }) => theme.colors.text};
-  font-size: ${({ theme }) => theme.typography.size.base};
-`
-
-const ModalSince = styled.span`
+  gap: 8px;
+  padding: 12px 24px;
+  font-family: ${({ theme }) => theme.typography.fontFamily};
   font-size: ${({ theme }) => theme.typography.size.sm};
-  color: ${({ theme }) => theme.colors.textMuted};
-`
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: ${({ theme }) => theme.spacing.md};
-  right: ${({ theme }) => theme.spacing.md};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  padding: 0;
-  background: transparent;
+  font-weight: ${({ theme }) => theme.typography.weight.semibold};
+  background-color: ${({ theme }) => theme.colors.accent};
+  color: ${({ theme }) => theme.colors.accentText};
   border: none;
   border-radius: ${({ theme }) => theme.radius.md};
-  color: ${({ theme }) => theme.colors.textMuted};
   cursor: pointer;
-  transition: color 0.2s, background-color 0.2s;
+  transition: transform 0.15s, filter 0.15s;
+  width: 100%;
+  max-width: 280px;
 
-  &:hover {
-    color: ${({ theme }) => theme.colors.text};
-    background-color: rgba(255, 255, 255, 0.08);
+  @media (min-width: 768px) {
+    width: auto;
+    max-width: none;
+    padding: 14px 28px;
+    font-size: ${({ theme }) => theme.typography.size.base};
   }
-  &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.colors.brand};
-    outline-offset: 2px;
-  }
+
+  &:hover { transform: translateY(-2px); filter: brightness(1.08); }
+  &:focus-visible { outline: 2px solid ${({ theme }) => theme.colors.accent}; outline-offset: 2px; }
 `
 
-/* ── Subcomponente do card individual ───────────────────────────────── */
-function TestimonialItem({ t }: { t: Testimonial }) {
-  const [open, setOpen] = useState(false)
-  const isTruncated = t.text.length > TRUNCATE_LIMIT
-  const preview = isTruncated ? t.text.slice(0, TRUNCATE_LIMIT).trimEnd() + '…' : t.text
-
-  return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
-      <TestimonialCard>
-        <QuoteBadge aria-hidden>
-          <Quote size={14} strokeWidth={2.5} />
-        </QuoteBadge>
-
-        <TestimonialText>{preview}</TestimonialText>
-
-        {isTruncated && (
-          <Dialog.Trigger asChild>
-            <ReadMoreBtn type="button" aria-label={`Ler depoimento completo de ${t.name}`}>
-              Ler mais
-            </ReadMoreBtn>
-          </Dialog.Trigger>
-        )}
-
-        <TestimonialMeta>
-          <RatingStars rating={t.rating} size={16} aria-label={`${t.rating} estrelas`} />
-          <TestimonialName>{t.name}</TestimonialName>
-          {t.since && <TestimonialSince>Aluna desde {t.since}</TestimonialSince>}
-        </TestimonialMeta>
-      </TestimonialCard>
-
-      <Dialog.Portal>
-        <Overlay />
-        <ModalContent aria-label={`Depoimento de ${t.name}`}>
-          <Dialog.Close asChild>
-            <CloseButton type="button" aria-label="Fechar depoimento">
-              <X size={18} strokeWidth={2} aria-hidden />
-            </CloseButton>
-          </Dialog.Close>
-
-          <ModalQuoteBadge aria-hidden>
-            <Quote size={18} strokeWidth={2.5} />
-          </ModalQuoteBadge>
-          <ModalText>{t.text}</ModalText>
-
-          <ModalMeta>
-            <RatingStars rating={t.rating} size={18} aria-label={`${t.rating} estrelas`} />
-            <ModalName>{t.name}</ModalName>
-            {t.since && <ModalSince>Aluna desde {t.since}</ModalSince>}
-          </ModalMeta>
-        </ModalContent>
-      </Dialog.Portal>
-    </Dialog.Root>
-  )
+function getInitials(name: string) {
+  return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
 }
 
-/* ── Seção principal ────────────────────────────────────────────────── */
-/**
- * Seção Depoimentos — imagem à esquerda, cards à direita; CTA Agendar aula.
- * Textos longos são truncados com botão "Ler mais" que abre modal Radix Dialog.
- */
 export function TestimonialsSection() {
-  const handleCta = () => openWhatsApp(links.whatsapp.href, CTA_MESSAGE)
+  const handleCta = () => {
+    window.open(links.whatsapp.href, '_blank', 'noopener,noreferrer')
+  }
 
   return (
-    <SectionRoot id="depoimentos" aria-labelledby="depoimentos-heading">
-      <SectionInner>
-        <HeadingWrap>
-          <Heading id="depoimentos-heading">Depoimentos</Heading>
-          <DecorativeLine aria-hidden />
-        </HeadingWrap>
-
-        <ImageWrapper>
-          <Image
-            src={testimonialImg}
-            alt="Turma feminina de Muay Thai em treino — espaço de evolução e respeito."
-            loading="lazy"
-            width={800}
-            height={600}
-          />
-        </ImageWrapper>
-
-        <CardsColumn>
+    <Section id="depoimentos" aria-labelledby="depoimentos-title">
+      <Container>
+        <SectionHeading id="depoimentos-title">O que elas dizem</SectionHeading>
+        <SectionSub>Depoimentos reais de alunas que transformaram suas vidas através do Muay Thai</SectionSub>
+        <Grid>
           {testimonials.map((t) => (
-            <TestimonialItem key={t.id} t={t} />
+            <Card key={t.id}>
+              <StarsWrap>
+                <RatingStars rating={t.rating} size={16} aria-label={`${t.rating} estrelas`} />
+              </StarsWrap>
+              <QuoteText>{t.text}</QuoteText>
+              <AuthorRow>
+                <Avatar aria-hidden>{getInitials(t.name)}</Avatar>
+                <AuthorInfo>
+                  <AuthorName>{t.name}</AuthorName>
+                  {t.since && <AuthorSince>Desde {t.since}</AuthorSince>}
+                </AuthorInfo>
+              </AuthorRow>
+            </Card>
           ))}
-        </CardsColumn>
-
+        </Grid>
         <CtaWrap>
-          <Button
-            variant="primary"
-            size="lg"
-            leftIcon={Calendar}
-            onClick={handleCta}
-            aria-label="Agendar aula experimental pelo WhatsApp"
-          >
-            Agendar aula experimental
-          </Button>
+          <AccentCta type="button" onClick={handleCta} aria-label="Quero fazer parte — agendar pelo WhatsApp">
+            <WhatsAppIcon size={18} />
+            Quero fazer parte
+          </AccentCta>
         </CtaWrap>
-      </SectionInner>
-    </SectionRoot>
+      </Container>
+    </Section>
   )
 }

@@ -1,14 +1,10 @@
-import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useState } from 'react'
 import styled from 'styled-components'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Menu, X, Instagram } from 'lucide-react'
 import { WhatsAppIcon } from './icons/WhatsAppIcon'
-import { openWhatsApp } from '../services/whatsapp'
 import { navItems, links } from '../data/site'
 import { Container } from './ui/Container'
-import { Button } from './ui/Button'
-import { logoTransparent } from '../assets/Logo'
 import { TiktokIcon } from './icons/TiktokIcon'
 
 const DRAWER_ID = 'nav-drawer'
@@ -19,10 +15,10 @@ const Header = styled.header`
   left: 0;
   right: 0;
   z-index: ${({ theme }) => theme.zIndex.navbar};
-  background-color: ${({ theme }) => theme.colors.surface};
-  background-image: linear-gradient(to bottom, ${({ theme }) => theme.colors.surface} 0%, ${({ theme }) => theme.colors.surface}99%, transparent 100%);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  background-color: rgba(10, 10, 10, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 `
 
 const Nav = styled.nav`
@@ -32,29 +28,21 @@ const Nav = styled.nav`
   justify-content: space-between;
 `
 
-const LogoLink = styled(Link)`
+const LogoAnchor = styled.a`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm};
   text-decoration: none;
+  cursor: pointer;
   &:hover { opacity: 0.9; }
 `
 
-const LogoImg = styled.img`
-  height: 2.25rem;
-  width: auto;
-  object-fit: contain;
-  display: block;
-  @media (min-width: 768px) {
-    height: 2.5rem;
-  }
-`
-
 const LogoText = styled.span`
+  font-family: ${({ theme }) => theme.typography.fontHeading};
   font-weight: ${({ theme }) => theme.typography.weight.bold};
   font-size: ${({ theme }) => theme.typography.size.lg};
   color: ${({ theme }) => theme.colors.text};
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
 `
 
 const NavList = styled.ul`
@@ -67,9 +55,11 @@ const NavList = styled.ul`
   @media (min-width: 768px) { display: flex; }
 `
 
-const NavLink = styled(Link)`
+const NavAnchor = styled.a`
   color: ${({ theme }) => theme.colors.textMuted};
   text-decoration: none;
+  font-size: ${({ theme }) => theme.typography.size.sm};
+  font-weight: ${({ theme }) => theme.typography.weight.medium};
   transition: color 0.2s;
   &:hover { color: ${({ theme }) => theme.colors.text}; }
 `
@@ -77,6 +67,31 @@ const NavLink = styled(Link)`
 const DesktopCta = styled.div`
   display: none;
   @media (min-width: 768px) { display: block; }
+`
+
+const NavWhatsAppBtn = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  font-family: ${({ theme }) => theme.typography.fontFamily};
+  font-size: ${({ theme }) => theme.typography.size.sm};
+  font-weight: ${({ theme }) => theme.typography.weight.semibold};
+  background-color: ${({ theme }) => theme.colors.accent};
+  color: ${({ theme }) => theme.colors.accentText};
+  border: none;
+  border-radius: ${({ theme }) => theme.radius.full};
+  cursor: pointer;
+  transition: transform 0.15s, filter 0.15s;
+
+  &:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+  }
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.accent};
+    outline-offset: 2px;
+  }
 `
 
 const HamburgerButton = styled.button`
@@ -93,7 +108,6 @@ const HamburgerButton = styled.button`
   @media (min-width: 768px) { display: none; }
 `
 
-/* Radix Dialog como Sheet/Drawer — overlay e conteúdo */
 const DialogOverlay = styled(Dialog.Overlay)`
   position: fixed;
   inset: 0;
@@ -114,7 +128,7 @@ const DialogContent = styled(Dialog.Content)`
   z-index: ${({ theme }) => theme.zIndex.drawer};
   height: 100%;
   width: min(320px, 86vw);
-  background-color: ${({ theme }) => theme.colors.surface};
+  background-color: ${({ theme }) => theme.colors.background};
   border-left: 1px solid ${({ theme }) => theme.colors.border};
   box-shadow: -4px 0 24px rgba(0, 0, 0, 0.4);
   display: flex;
@@ -145,13 +159,8 @@ const DrawerHeader = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 `
 
-const DrawerLogo = styled.img`
-  height: 2rem;
-  width: auto;
-  object-fit: contain;
-`
-
-const DrawerTitle = styled.span`
+const DrawerBrand = styled.span`
+  font-family: ${({ theme }) => theme.typography.fontHeading};
   font-weight: ${({ theme }) => theme.typography.weight.bold};
   color: ${({ theme }) => theme.colors.text};
 `
@@ -177,7 +186,7 @@ const DrawerNav = styled.ul`
   gap: ${({ theme }) => theme.spacing.xs};
 `
 
-const DrawerNavLink = styled(Link)`
+const DrawerNavAnchor = styled.a`
   display: block;
   padding: ${({ theme }) => theme.spacing.md};
   color: ${({ theme }) => theme.colors.textMuted};
@@ -196,6 +205,25 @@ const DrawerFooter = styled.div`
   gap: ${({ theme }) => theme.spacing.sm};
 `
 
+const DrawerAccentBtn = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 18px;
+  font-family: ${({ theme }) => theme.typography.fontFamily};
+  font-size: ${({ theme }) => theme.typography.size.base};
+  font-weight: ${({ theme }) => theme.typography.weight.semibold};
+  background-color: ${({ theme }) => theme.colors.accent};
+  color: ${({ theme }) => theme.colors.accentText};
+  border: none;
+  border-radius: ${({ theme }) => theme.radius.md};
+  cursor: pointer;
+  transition: filter 0.15s;
+  &:hover { filter: brightness(1.08); }
+`
+
 const DrawerSocialLink = styled.a`
   display: inline-flex;
   align-items: center;
@@ -211,35 +239,54 @@ const DrawerSocialLink = styled.a`
 
 export function Navbar() {
   const [open, setOpen] = useState(false)
-  const location = useLocation()
 
   const closeMenu = () => setOpen(false)
 
-  useEffect(() => {
-    setOpen(false)
-  }, [location.pathname])
+  const handleAgendar = () => {
+    window.open(links.whatsapp.href, '_blank', 'noopener,noreferrer')
+  }
 
-  const handleAgendar = () => openWhatsApp(links.whatsapp.href)
+  const handleNavClick = (href: string) => {
+    closeMenu()
+    const id = href.replace('#', '')
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   return (
     <Header>
       <Container>
         <Nav aria-label="Principal">
-          <LogoLink to="/">
-            <LogoImg src={logoTransparent} alt="Team Link" />
-            <LogoText>Team Link</LogoText>
-          </LogoLink>
+          <LogoAnchor
+            href="#hero"
+            onClick={(e) => {
+              e.preventDefault()
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+            }}
+          >
+            <LogoText>Karol Cascelli</LogoText>
+          </LogoAnchor>
+
           <NavList>
             {navItems.map((item) => (
               <li key={item.href}>
-                <NavLink to={item.href}>{item.label}</NavLink>
+                <NavAnchor
+                  href={item.href}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    handleNavClick(item.href)
+                  }}
+                >
+                  {item.label}
+                </NavAnchor>
               </li>
             ))}
           </NavList>
+
           <DesktopCta>
-            <Button variant="primary" size="md" leftIcon={WhatsAppIcon} onClick={handleAgendar}>
-              Agendar aula
-            </Button>
+            <NavWhatsAppBtn type="button" onClick={handleAgendar} aria-label="WhatsApp">
+              <WhatsAppIcon size={16} />
+              WhatsApp
+            </NavWhatsAppBtn>
           </DesktopCta>
 
           <Dialog.Root open={open} onOpenChange={setOpen}>
@@ -257,8 +304,7 @@ export function Navbar() {
               <DialogOverlay />
               <DialogContent id={DRAWER_ID} aria-label="Menu de navegação">
                 <DrawerHeader>
-                  <DrawerLogo src={logoTransparent} alt="" aria-hidden />
-                  <DrawerTitle>Menu</DrawerTitle>
+                  <DrawerBrand>Karol Cascelli</DrawerBrand>
                   <Dialog.Close asChild>
                     <DrawerCloseBtn type="button" aria-label="Fechar menu">
                       <X size={20} strokeWidth={2} aria-hidden />
@@ -268,25 +314,30 @@ export function Navbar() {
                 <DrawerNav>
                   {navItems.map((item) => (
                     <li key={item.href}>
-                      <DrawerNavLink to={item.href} onClick={closeMenu}>
+                      <DrawerNavAnchor
+                        href={item.href}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          handleNavClick(item.href)
+                        }}
+                      >
                         {item.label}
-                      </DrawerNavLink>
+                      </DrawerNavAnchor>
                     </li>
                   ))}
                 </DrawerNav>
                 <DrawerFooter>
-                  <Button
-                    fullWidth
-                    variant="primary"
-                    size="md"
-                    leftIcon={WhatsAppIcon}
+                  <DrawerAccentBtn
+                    type="button"
                     onClick={() => {
                       handleAgendar()
                       closeMenu()
                     }}
+                    aria-label="Falar no WhatsApp"
                   >
-                    Agendar aula
-                  </Button>
+                    <WhatsAppIcon size={18} />
+                    WhatsApp
+                  </DrawerAccentBtn>
                   <DrawerSocialLink
                     href={links.instagram.href}
                     target="_blank"

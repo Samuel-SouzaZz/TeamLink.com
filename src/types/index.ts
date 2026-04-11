@@ -3,12 +3,6 @@ export interface NavItem {
   href: string
 }
 
-export interface Link {
-  label: string
-  href: string
-  ariaLabel?: string
-}
-
 export interface Testimonial {
   id: string
   name: string

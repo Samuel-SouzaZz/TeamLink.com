@@ -5,13 +5,13 @@ const Wrapper = styled.span`
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  color: ${({ theme }) => theme.colors.muted};
+  color: ${({ theme }) => theme.colors.textMuted};
 `
 
 const StarIcon = styled(Star)<{ $filled?: boolean }>`
   flex-shrink: 0;
-  color: ${({ theme, $filled }) => ($filled ? theme.colors.brand : theme.colors.border)};
-  fill: ${({ theme, $filled }) => ($filled ? theme.colors.brand : 'transparent')};
+  color: ${({ theme, $filled }) => ($filled ? theme.colors.accent : 'rgba(255,255,255,0.15)')};
+  fill: ${({ theme, $filled }) => ($filled ? theme.colors.accent : 'transparent')};
 `
 
 export interface RatingStarsProps {

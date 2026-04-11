@@ -1,6 +1,3 @@
-/**
- * Sobre — imagem da seção Turma Feminina / Sobre.
- */
-import sobreImage from './Sobre.png'
+import sobreImage from './Sobre.webp'
 
 export { sobreImage }

@@ -1,24 +1,37 @@
-import { useState } from 'react'
+import { useState, lazy, Suspense } from 'react'
 import styled from 'styled-components'
 
-import { LightboxModal } from '../components/LightboxModal'
 import { Container, SectionTitle } from '../components/ui'
 import { galleryItems } from '../data/gallery'
 
+const LightboxModal = lazy(() =>
+  import('../components/LightboxModal').then((m) => ({ default: m.LightboxModal }))
+)
+
 const Section = styled.section`
-  padding: ${({ theme }) => theme.spacing.xl} ${({ theme }) => theme.spacing.md};
-  background-color: ${({ theme }) => theme.colors.surfaceElevated};
+  padding: 40px 16px;
+  background-color: ${({ theme }) => theme.colors.background};
+
+  @media (min-width: 768px) {
+    padding: ${({ theme }) => theme.spacing.xl} ${({ theme }) => theme.spacing.md};
+  }
 `
 
 const Grid = styled.ul`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: ${({ theme }) => theme.spacing.md};
+  gap: 8px;
   margin: 0;
   padding: 0;
   list-style: none;
-  @media (min-width: 768px) { grid-template-columns: repeat(3, 1fr); }
-  @media (min-width: 1024px) { grid-template-columns: repeat(4, 1fr); }
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: ${({ theme }) => theme.spacing.md};
+  }
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 `
 
 const GridItem = styled.li``
@@ -26,18 +39,21 @@ const GridItem = styled.li``
 const ImageButton = styled.button`
   display: block;
   width: 100%;
-  aspect-ratio: 4/3;
-  border-radius: ${({ theme }) => theme.radius.lg};
+  aspect-ratio: 1;
+  border-radius: 10px;
   overflow: hidden;
-  background-color: ${({ theme }) => theme.colors.surface};
+  background-color: ${({ theme }) => theme.colors.background};
   border: 1px solid ${({ theme }) => theme.colors.border};
   padding: 0;
   cursor: pointer;
   position: relative;
-  &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.colors.brand};
-    outline-offset: 2px;
+
+  @media (min-width: 768px) {
+    aspect-ratio: 4/3;
+    border-radius: ${({ theme }) => theme.radius.lg};
   }
+
+  &:focus-visible { outline: 2px solid ${({ theme }) => theme.colors.brand}; outline-offset: 2px; }
 `
 
 const ImageInner = styled.span`
@@ -85,13 +101,7 @@ export function GallerySection() {
                 onClick={() => setLightboxIndex(idx)}
               >
                 <ImageInner>
-                  <Thumb
-                    src={item.src}
-                    alt={item.alt}
-                    loading="lazy"
-                    width={400}
-                    height={300}
-                  />
+                  <Thumb src={item.src} alt={item.alt} loading="lazy" decoding="async" width={400} height={400} />
                   <ThumbOverlay aria-hidden />
                 </ImageInner>
               </ImageButton>
@@ -100,11 +110,15 @@ export function GallerySection() {
         </Grid>
       </Container>
 
-      <LightboxModal
-        index={lightboxIndex}
-        allItems={galleryItems}
-        onClose={() => setLightboxIndex(-1)}
-      />
+      {lightboxIndex >= 0 && (
+        <Suspense fallback={null}>
+          <LightboxModal
+            index={lightboxIndex}
+            allItems={galleryItems}
+            onClose={() => setLightboxIndex(-1)}
+          />
+        </Suspense>
+      )}
     </Section>
   )
 }

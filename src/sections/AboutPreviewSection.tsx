@@ -1,82 +1,140 @@
-import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import { ArrowRight } from 'lucide-react'
-import { Container, Button } from '../components/ui'
+import { Heart, Target, Shield } from 'lucide-react'
+import { Container, SectionTitle } from '../components/ui'
 
-const SectionRoot = styled.section`
-  padding: ${({ theme }) => theme.spacing['2xl']} ${({ theme }) => theme.spacing.md};
-  background-color: ${({ theme }) => theme.colors.background};
+const Section = styled.section`
+  padding: 40px 16px;
 
-  @media (min-width: 640px) {
-    padding: ${({ theme }) => theme.spacing['2xl']} ${({ theme }) => theme.spacing.lg};
-  }
-  @media (min-width: 1024px) {
-    padding: ${({ theme }) => theme.spacing['2xl']} 0;
+  @media (min-width: 768px) {
+    padding: ${({ theme }) => theme.spacing['2xl']} ${({ theme }) => theme.spacing.md};
   }
 `
 
-const SectionInner = styled(Container)`
+const Grid = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 12px;
+
+  @media (min-width: 768px) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: ${({ theme }) => theme.spacing.lg};
+  }
+`
+
+const FeatureCard = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  transition: border-color 0.3s ease;
+
+  @media (min-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: ${({ theme }) => theme.spacing.md};
+    padding: ${({ theme }) => theme.spacing.lg};
+    border-radius: ${({ theme }) => theme.radius.lg};
+
+    &:hover {
+      transform: translateY(-4px);
+      border-color: ${({ theme }) => theme.colors.brand};
+    }
+  }
+`
+
+const IconWrap = styled.div`
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 10px;
+  background: ${({ theme }) => theme.colors.brand};
+  display: flex;
   align-items: center;
-  text-align: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+
+  @media (min-width: 768px) {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: ${({ theme }) => theme.radius.lg};
+  }
 `
 
-const Title = styled.h2`
-  margin: 0 0 ${({ theme }) => theme.spacing.md};
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: ${({ theme }) => theme.typography.weight.bold};
+const CardContent = styled.div`
+  flex: 1;
+  min-width: 0;
+`
+
+const CardTitle = styled.h3`
+  margin: 0 0 4px;
+  font-size: ${({ theme }) => theme.typography.size.base};
+  font-weight: ${({ theme }) => theme.typography.weight.semibold};
   color: ${({ theme }) => theme.colors.text};
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+
+  @media (min-width: 768px) {
+    margin: 0;
+    font-size: ${({ theme }) => theme.typography.size.xl};
+  }
 `
 
-const DecorativeLine = styled.div`
-  width: 4rem;
-  height: 3px;
-  background-color: ${({ theme }) => theme.colors.brand};
-  margin: 0 auto ${({ theme }) => theme.spacing.xl};
-  border-radius: ${({ theme }) => theme.radius.full};
-`
-
-const Subtitle = styled.p`
-  margin: 0 0 ${({ theme }) => theme.spacing.xl};
-  max-width: 36rem;
-  font-size: clamp(1rem, 2vw, 1.125rem);
-  line-height: 1.6;
+const CardText = styled.p`
+  margin: 0;
+  font-size: 0.8125rem;
   color: ${({ theme }) => theme.colors.textMuted};
+  line-height: 1.5;
+
+  @media (min-width: 768px) {
+    font-size: ${({ theme }) => theme.typography.size.base};
+    line-height: 1.65;
+  }
 `
 
-const CtaWrap = styled.div`
-  margin-top: ${({ theme }) => theme.spacing.md};
-`
+const features = [
+  {
+    icon: Heart,
+    title: 'Foco em Mulheres',
+    text: 'Ambiente exclusivo e acolhedor, pensado para que você treine com confiança e respeito ao seu ritmo.',
+  },
+  {
+    icon: Target,
+    title: 'Treino Personalizado',
+    text: 'Personal training com horários flexíveis e acompanhamento individual.',
+  },
+  {
+    icon: Shield,
+    title: 'Tradição Team Link',
+    text: 'Parte de uma das maiores equipes de artes marciais do Brasil, desde 2015.',
+  },
+] as const
 
-/**
- * Seção "Sobre" — preview com título, linha decorativa, subtítulo e CTA para /sobre.
- */
 export function AboutPreviewSection() {
-  const navigate = useNavigate()
-
   return (
-    <SectionRoot aria-labelledby="about-preview-title">
-      <SectionInner>
-        <Title id="about-preview-title">Sobre</Title>
-        <DecorativeLine aria-hidden />
-        <Subtitle>
-          Treinos de Muay Thai com foco na turma feminina. Team Link.
-        </Subtitle>
-        <CtaWrap>
-          <Button
-            variant="primary"
-            size="lg"
-            rightIcon={ArrowRight}
-            onClick={() => navigate('/sobre')}
-            aria-label="Saiba mais sobre a academia"
-          >
-            Saiba mais
-          </Button>
-        </CtaWrap>
-      </SectionInner>
-    </SectionRoot>
+    <Section aria-labelledby="proposta-title">
+      <Container>
+        <SectionTitle
+          title="Por que treinar com a Karol?"
+          subtitle="Três pilares que fazem a diferença no seu treino."
+          id="proposta-title"
+        />
+        <Grid>
+          {features.map((f) => (
+            <FeatureCard key={f.title}>
+              <IconWrap aria-hidden>
+                <f.icon size={20} strokeWidth={2} />
+              </IconWrap>
+              <CardContent>
+                <CardTitle>{f.title}</CardTitle>
+                <CardText>{f.text}</CardText>
+              </CardContent>
+            </FeatureCard>
+          ))}
+        </Grid>
+      </Container>
+    </Section>
   )
 }

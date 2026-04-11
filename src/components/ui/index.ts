@@ -1,7 +1,3 @@
 export { Container } from './Container'
-export { Button } from './Button'
-export type { ButtonProps } from './Button'
 export { SectionTitle } from './SectionTitle'
 export type { SectionTitleProps } from './SectionTitle'
-export { Card, CardBox } from './Card'
-export type { CardProps } from './Card'

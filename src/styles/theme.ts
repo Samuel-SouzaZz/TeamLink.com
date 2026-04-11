@@ -1,18 +1,14 @@
-/**
- * Tema do design system — cores, espaçamento, tipografia, raio
- */
-
 export const theme = {
   colors: {
-    brand: '#b91c1c',
-    brandLight: '#dc2626',
+    brand: '#A1122B',
+    brandLight: '#C7375F',
+    accent: '#B4FF50',
+    accentText: '#0a0a0a',
     background: '#0a0a0a',
-    surface: '#0a0a0a',
-    surfaceElevated: '#171717',
-    muted: '#737373',
-    border: '#262626',
-    text: '#fafafa',
-    textMuted: '#a3a3a3',
+    surfaceElevated: 'rgba(255,255,255,0.05)',
+    border: 'rgba(255,255,255,0.1)',
+    text: '#f5f5f5',
+    textMuted: 'rgba(245,245,245,0.6)',
     overlay: 'rgba(0, 0, 0, 0.6)',
     whatsapp: '#25D366',
     whatsappHover: '#20bd5a',
@@ -30,10 +26,10 @@ export const theme = {
     lg: '24px',
     xl: '32px',
     '2xl': '48px',
-    container: 'max(16px, (100vw - 1200px) / 2)',
   },
   typography: {
-    fontFamily: 'system-ui, -apple-system, sans-serif',
+    fontHeading: "'Sora', system-ui, sans-serif",
+    fontFamily: "'Inter', system-ui, sans-serif",
     size: {
       sm: '0.875rem',
       base: '1rem',
@@ -47,15 +43,15 @@ export const theme = {
     weight: {
       normal: 400,
       medium: 500,
+      semibold: 600,
       bold: 700,
     },
   },
   zIndex: {
+    cta: 40,
     navbar: 50,
     overlay: 60,
     drawer: 61,
-    modal: 50,
-    cta: 40,
   },
   layout: {
     navbarHeight: '3.5rem',
