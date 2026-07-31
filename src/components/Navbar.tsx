@@ -1,24 +1,28 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Menu, X, Instagram } from 'lucide-react'
-import { WhatsAppIcon } from './icons/WhatsAppIcon'
+import { WhatsAppIcon, TiktokIcon } from './icons'
+import { openExternal, scrollToId } from '../lib/browser'
+import { ctaTypography, focusRing } from '../styles/mixins'
 import { navItems, links } from '../data/site'
 import { Container } from './ui/Container'
-import { TiktokIcon } from './icons/TiktokIcon'
 
 const DRAWER_ID = 'nav-drawer'
 
-const Header = styled.header`
+const Header = styled.header<{ $scrolled: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: ${({ theme }) => theme.zIndex.navbar};
-  background-color: rgba(10, 10, 10, 0.82);
+  background-color: ${({ $scrolled }) => ($scrolled ? 'rgba(10, 10, 10, 0.92)' : 'rgba(10, 10, 10, 0.78)')};
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid
+    ${({ $scrolled }) => ($scrolled ? 'rgba(255, 255, 255, 0.10)' : 'rgba(255, 255, 255, 0.06)')};
+  box-shadow: ${({ $scrolled }) => ($scrolled ? '0 8px 24px -16px rgba(0, 0, 0, 0.6)' : 'none')};
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 `
 
 const Nav = styled.nav`
@@ -56,12 +60,34 @@ const NavList = styled.ul`
 `
 
 const NavAnchor = styled.a`
+  position: relative;
   color: ${({ theme }) => theme.colors.textMuted};
   text-decoration: none;
   font-size: ${({ theme }) => theme.typography.size.sm};
   font-weight: ${({ theme }) => theme.typography.weight.medium};
+  padding: 4px 2px;
   transition: color 0.2s;
-  &:hover { color: ${({ theme }) => theme.colors.text}; }
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 2px;
+    border-radius: 2px;
+    background: ${({ theme }) => theme.colors.accent};
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.25s ease;
+  }
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.text};
+    &::after { transform: scaleX(1); }
+  }
+
+  ${focusRing('accent', '4px', '2px')}
 `
 
 const DesktopCta = styled.div`
@@ -74,9 +100,7 @@ const NavWhatsAppBtn = styled.button`
   align-items: center;
   gap: 6px;
   padding: 8px 18px;
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.size.sm};
-  font-weight: ${({ theme }) => theme.typography.weight.semibold};
+  ${ctaTypography}
   background-color: ${({ theme }) => theme.colors.accent};
   color: ${({ theme }) => theme.colors.accentText};
   border: none;
@@ -88,10 +112,7 @@ const NavWhatsAppBtn = styled.button`
     transform: translateY(-1px);
     filter: brightness(1.08);
   }
-  &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.colors.accent};
-    outline-offset: 2px;
-  }
+  ${focusRing('accent')}
 `
 
 const HamburgerButton = styled.button`
@@ -104,7 +125,7 @@ const HamburgerButton = styled.button`
   cursor: pointer;
   transition: background-color 0.2s;
   &:hover { background-color: rgba(255,255,255,0.1); }
-  &:focus-visible { outline: 2px solid ${({ theme }) => theme.colors.brand}; outline-offset: 2px; }
+  ${focusRing('brand')}
   @media (min-width: 768px) { display: none; }
 `
 
@@ -174,7 +195,7 @@ const DrawerCloseBtn = styled.button`
   cursor: pointer;
   transition: color 0.2s, background-color 0.2s;
   &:hover { color: ${({ theme }) => theme.colors.text}; background-color: rgba(255,255,255,0.1); }
-  &:focus-visible { outline: 2px solid ${({ theme }) => theme.colors.brand}; outline-offset: 2px; }
+  ${focusRing('brand')}
 `
 
 const DrawerNav = styled.ul`
@@ -234,26 +255,31 @@ const DrawerSocialLink = styled.a`
   border-radius: ${({ theme }) => theme.radius.md};
   transition: color 0.2s, background-color 0.2s;
   &:hover { color: ${({ theme }) => theme.colors.text}; background-color: rgba(255,255,255,0.05); }
-  &:focus-visible { outline: 2px solid ${({ theme }) => theme.colors.brand}; outline-offset: 2px; }
+  ${focusRing('brand')}
 `
 
 export function Navbar() {
   const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 16)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const closeMenu = () => setOpen(false)
 
-  const handleAgendar = () => {
-    window.open(links.whatsapp.href, '_blank', 'noopener,noreferrer')
-  }
+  const handleAgendar = () => openExternal(links.whatsapp.href)
 
   const handleNavClick = (href: string) => {
     closeMenu()
-    const id = href.replace('#', '')
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    scrollToId(href)
   }
 
   return (
-    <Header>
+    <Header $scrolled={scrolled}>
       <Container>
         <Nav aria-label="Principal">
           <LogoAnchor

@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom'
+import type { ReactNode } from 'react'
 import styled from 'styled-components'
 import { Navbar } from '../components/Navbar'
 import { Footer } from '../components/Footer'
@@ -16,13 +16,11 @@ const Main = styled.main`
   padding-top: ${({ theme }) => theme.layout.navbarHeight};
 `
 
-export function AppLayout() {
+export function AppLayout({ children }: { children: ReactNode }) {
   return (
     <LayoutRoot>
       <Navbar />
-      <Main>
-        <Outlet />
-      </Main>
+      <Main>{children}</Main>
       <Footer />
       <CtaWhatsApp />
     </LayoutRoot>

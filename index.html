@@ -3,38 +3,138 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0a0a" />
     <title>Team Link | Karol Cascelli — Turma Feminina</title>
-    <meta name="description" content="Turma feminina de Muay Thai com Karol Cascelli. Sua melhor versão começa no tatame. Team Link. Agende sua aula experimental." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <meta name="description" content="Turma feminina de Muay Thai com Karol Cascelli. Sua melhor versão começa no tatame. Team Link. Agende sua aula experimental gratuita." />
+
+    <!-- LCP: preload da hero image em AVIF responsivo (suporte: Chrome 85+, FF 93+, Safari 16.4+).
+         Browsers sem AVIF ignoram este preload e usam o <picture> com <source type=webp>. -->
+    <link
+      rel="preload"
+      as="image"
+      type="image/avif"
+      imagesrcset="/hero/hero-768.avif 768w, /hero/hero-1280.avif 1280w"
+      imagesizes="(min-width: 1280px) 1280px, 100vw"
+      fetchpriority="high"
+    />
+
+    <!-- Preload da fonte de body (Inter 400) — peso mais crítico no first paint -->
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/inter-latin-400-normal.woff2"
+      crossorigin
+    />
+
+    <!-- Critical CSS inline: reset + base + @font-face self-hosted (zero round-trip externo) -->
+    <style>
+      /* Inter (latin) — body */
+      @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url('/fonts/inter-latin-400-normal.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 500;
+        font-display: swap;
+        src: url('/fonts/inter-latin-500-normal.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+        src: url('/fonts/inter-latin-600-normal.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      /* Sora (latin) — headings */
+      @font-face {
+        font-family: 'Sora';
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+        src: url('/fonts/sora-latin-600-normal.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: 'Sora';
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src: url('/fonts/sora-latin-700-normal.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+
+      /* Reset + base */
+      *, *::before, *::after { box-sizing: border-box; }
+      html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background-color: #0a0a0a;
+        color: #f5f5f5;
+        font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        font-size: 1rem;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      img, video { display: block; max-width: 100%; height: auto; }
+      #app { min-height: 100vh; display: flex; flex-direction: column; }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+
     <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
     <link rel="apple-touch-icon" href="/favicon.jpg" />
 
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KPSFG3JHMD"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-KPSFG3JHMD');
-    </script>
-
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Team Link | Karol Cascelli" />
-    <meta property="og:description" content="Turma feminina de Muay Thai. Sua melhor versão começa no tatame. Agende sua aula experimental." />
-    <meta property="og:image" content="/og.jpg" />
+    <meta property="og:url" content="https://karolteamlink.com.br/" />
+    <meta property="og:title" content="Team Link | Karol Cascelli — Turma Feminina de Muay Thai" />
+    <meta property="og:description" content="Turma feminina de Muay Thai com Karol Cascelli. Sua melhor versão começa no tatame. Agende sua aula experimental gratuita." />
+    <meta property="og:image" content="https://karolteamlink.com.br/og.jpg" />
     <meta property="og:locale" content="pt_BR" />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://karolteamlink.com.br/" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Team Link | Karol Cascelli" />
-    <meta name="twitter:description" content="Turma feminina de Muay Thai. Sua melhor versão começa no tatame. Agende sua aula experimental." />
-    <meta name="twitter:image" content="/og.jpg" />
+    <meta name="twitter:title" content="Team Link | Karol Cascelli — Turma Feminina de Muay Thai" />
+    <meta name="twitter:description" content="Turma feminina de Muay Thai com Karol Cascelli. Sua melhor versão começa no tatame. Agende sua aula experimental gratuita." />
+    <meta name="twitter:image" content="https://karolteamlink.com.br/og.jpg" />
   </head>
   <body>
     <div id="app"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Google Analytics: carregado após 'load' para não competir com FCP/LCP -->
+    <script>
+      window.addEventListener('load', function () {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-KPSFG3JHMD';
+        document.head.appendChild(s);
+        s.onload = function () {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){ dataLayer.push(arguments); }
+          window.gtag = gtag;
+          gtag('js', new Date());
+          gtag('config', 'G-KPSFG3JHMD', { transport_type: 'beacon' });
+        };
+      });
+    </script>
   </body>
 </html>

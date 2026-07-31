@@ -11,6 +11,9 @@ node_modules
 dist-ssr
 *.local
 
+# Snapshots de regressão visual (npm run visual:baseline / visual:check)
+.snap-*.txt
+
 # Variáveis de ambiente (nunca fazer commit de chaves ou segredos)
 .env
 .env.*

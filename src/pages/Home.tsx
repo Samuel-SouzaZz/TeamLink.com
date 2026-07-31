@@ -2,9 +2,9 @@ import {
   HeroSection,
   AboutPreviewSection,
   ProgramsSection,
+  TestimonialsSection,
   ScheduleSection,
   HistorySection,
-  TestimonialsSection,
   GallerySection,
   CtaFinalSection,
 } from '../sections'
@@ -15,9 +15,9 @@ export function Home() {
       <HeroSection />
       <AboutPreviewSection />
       <ProgramsSection />
+      <TestimonialsSection />
       <ScheduleSection />
       <HistorySection />
-      <TestimonialsSection />
       <GallerySection />
       <CtaFinalSection />
     </>

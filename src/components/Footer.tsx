@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 import { Instagram } from 'lucide-react'
-import { WhatsAppIcon } from './icons/WhatsAppIcon'
+import { WhatsAppIcon, TiktokIcon } from './icons'
+import { focusRing } from '../styles/mixins'
 import { links, SLOGAN } from '../data/site'
 import { Container } from './ui/Container'
-import { TiktokIcon } from './icons/TiktokIcon'
 
 const FooterEl = styled.footer`
   background-color: rgba(255, 255, 255, 0.02);
@@ -78,7 +78,7 @@ const IconLink = styled.a`
   }
 
   &:hover { color: ${({ theme }) => theme.colors.text}; }
-  &:focus-visible { outline: 2px solid ${({ theme }) => theme.colors.brand}; outline-offset: 2px; border-radius: 4px; }
+  ${focusRing('brand', '2px', '4px')}
 `
 
 const BottomRow = styled.div`

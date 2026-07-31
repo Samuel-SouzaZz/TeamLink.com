@@ -1,44 +1,17 @@
 import styled from 'styled-components'
 
-import { WhatsAppIcon } from '../components/icons/WhatsAppIcon'
-import { Container } from '../components/ui'
+import { WhatsAppIcon } from '../components/icons'
+import { Container, SectionTitle, Reveal } from '../components/ui'
 import { RatingStars } from '../components/RatingStars'
+import { openExternal } from '../lib/browser'
+import { alpha } from '../styles/color'
+import { focusRing, inlineCtaBase, sectionPadding, surface } from '../styles/mixins'
 import { testimonials } from '../data/testimonials'
 import { links } from '../data/site'
 
 const Section = styled.section`
-  padding: 40px 16px;
+  ${sectionPadding}
   background-color: ${({ theme }) => theme.colors.background};
-
-  @media (min-width: 768px) {
-    padding: ${({ theme }) => theme.spacing['2xl']} ${({ theme }) => theme.spacing.md};
-  }
-`
-
-const SectionHeading = styled.h2`
-  text-align: center;
-  margin: 0 0 4px;
-  font-family: ${({ theme }) => theme.typography.fontHeading};
-  font-size: clamp(1.5rem, 5vw, 2.5rem);
-  font-weight: ${({ theme }) => theme.typography.weight.bold};
-  color: ${({ theme }) => theme.colors.text};
-  font-style: italic;
-
-  @media (min-width: 768px) {
-    margin-bottom: ${({ theme }) => theme.spacing.sm};
-  }
-`
-
-const SectionSub = styled.p`
-  text-align: center;
-  margin: 0 0 24px;
-  font-size: 0.8125rem;
-  color: ${({ theme }) => theme.colors.textMuted};
-
-  @media (min-width: 768px) {
-    margin-bottom: ${({ theme }) => theme.spacing.xl};
-    font-size: ${({ theme }) => theme.typography.size.base};
-  }
 `
 
 const Grid = styled.div`
@@ -54,14 +27,15 @@ const Grid = styled.div`
 `
 
 const Card = styled.div`
-  background: rgba(255, 255, 255, 0.04);
+  position: relative;
+  ${surface}
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
   padding: 18px 16px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 
   @media (min-width: 768px) {
     border-radius: 20px;
@@ -70,7 +44,8 @@ const Card = styled.div`
 
     &:hover {
       transform: translateY(-4px);
-      border-color: rgba(255, 255, 255, 0.2);
+      border-color: ${({ theme }) => alpha(theme.colors.brandLight, 0.35)};
+      box-shadow: 0 20px 40px -20px ${({ theme }) => alpha(theme.colors.brand, 0.4)};
     }
   }
 `
@@ -157,14 +132,7 @@ const CtaWrap = styled.div`
 `
 
 const AccentCta = styled.button`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 24px;
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.size.sm};
-  font-weight: ${({ theme }) => theme.typography.weight.semibold};
+  ${inlineCtaBase}
   background-color: ${({ theme }) => theme.colors.accent};
   color: ${({ theme }) => theme.colors.accentText};
   border: none;
@@ -182,7 +150,7 @@ const AccentCta = styled.button`
   }
 
   &:hover { transform: translateY(-2px); filter: brightness(1.08); }
-  &:focus-visible { outline: 2px solid ${({ theme }) => theme.colors.accent}; outline-offset: 2px; }
+  ${focusRing('accent')}
 `
 
 function getInitials(name: string) {
@@ -190,38 +158,45 @@ function getInitials(name: string) {
 }
 
 export function TestimonialsSection() {
-  const handleCta = () => {
-    window.open(links.whatsapp.href, '_blank', 'noopener,noreferrer')
-  }
+  const handleCta = () => openExternal(links.whatsapp.href)
 
   return (
     <Section id="depoimentos" aria-labelledby="depoimentos-title">
       <Container>
-        <SectionHeading id="depoimentos-title">O que elas dizem</SectionHeading>
-        <SectionSub>Depoimentos reais de alunas que transformaram suas vidas através do Muay Thai</SectionSub>
+        <Reveal>
+          <SectionTitle
+            title="O que elas dizem"
+            subtitle="Depoimentos reais de alunas que transformaram suas vidas através do Muay Thai."
+            id="depoimentos-title"
+          />
+        </Reveal>
         <Grid>
-          {testimonials.map((t) => (
-            <Card key={t.id}>
-              <StarsWrap>
-                <RatingStars rating={t.rating} size={16} aria-label={`${t.rating} estrelas`} />
-              </StarsWrap>
-              <QuoteText>{t.text}</QuoteText>
-              <AuthorRow>
-                <Avatar aria-hidden>{getInitials(t.name)}</Avatar>
-                <AuthorInfo>
-                  <AuthorName>{t.name}</AuthorName>
-                  {t.since && <AuthorSince>Desde {t.since}</AuthorSince>}
-                </AuthorInfo>
-              </AuthorRow>
-            </Card>
+          {testimonials.map((t, i) => (
+            <Reveal key={t.id} delay={i * 120}>
+              <Card>
+                <StarsWrap>
+                  <RatingStars rating={t.rating} size={16} aria-label={`${t.rating} estrelas`} />
+                </StarsWrap>
+                <QuoteText>{t.text}</QuoteText>
+                <AuthorRow>
+                  <Avatar aria-hidden>{getInitials(t.name)}</Avatar>
+                  <AuthorInfo>
+                    <AuthorName>{t.name}</AuthorName>
+                    {t.since && <AuthorSince>Desde {t.since}</AuthorSince>}
+                  </AuthorInfo>
+                </AuthorRow>
+              </Card>
+            </Reveal>
           ))}
         </Grid>
-        <CtaWrap>
-          <AccentCta type="button" onClick={handleCta} aria-label="Quero fazer parte — agendar pelo WhatsApp">
-            <WhatsAppIcon size={18} />
-            Quero fazer parte
-          </AccentCta>
-        </CtaWrap>
+        <Reveal>
+          <CtaWrap>
+            <AccentCta type="button" onClick={handleCta} aria-label="Quero fazer parte — agendar pelo WhatsApp">
+              <WhatsAppIcon size={18} />
+              Quero fazer parte
+            </AccentCta>
+          </CtaWrap>
+        </Reveal>
       </Container>
     </Section>
   )

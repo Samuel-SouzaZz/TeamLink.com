@@ -1,10 +1,7 @@
-import type { SVGProps } from 'react'
+import type { IconProps } from './types'
 
-export function WhatsAppIcon({
-  size = 24,
-  strokeWidth: _strokeWidth,
-  ...props
-}: SVGProps<SVGSVGElement> & { size?: number; strokeWidth?: number }) {
+/** Ícone WhatsApp (sólido). Símbolo oficial, preenchido com `currentColor`. */
+export function WhatsAppIcon({ size = 24, ...props }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

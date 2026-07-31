@@ -1,16 +1,15 @@
 import styled from 'styled-components'
 import { Check } from 'lucide-react'
-import { Container, SectionTitle } from '../components/ui'
+import { Container, SectionTitle, Reveal } from '../components/ui'
+import { openExternal } from '../lib/browser'
+import { alpha } from '../styles/color'
+import { cardCtaBase, cardCtaDesktop, focusRing, sectionPadding, surface } from '../styles/mixins'
 import { links } from '../data/site'
 import { turmaFemininaPrice, personalPlans } from '../data/metrics'
 
 const Section = styled.section`
-  padding: 40px 16px;
+  ${sectionPadding}
   background-color: ${({ theme }) => theme.colors.background};
-
-  @media (min-width: 768px) {
-    padding: ${({ theme }) => theme.spacing['2xl']} ${({ theme }) => theme.spacing.md};
-  }
 `
 
 const Grid = styled.div`
@@ -22,22 +21,44 @@ const Grid = styled.div`
     grid-template-columns: 1fr 1fr;
     gap: ${({ theme }) => theme.spacing.xl};
   }
+
+  @media (min-width: 1024px) {
+    gap: ${({ theme }) => theme.spacing['2xl']};
+    max-width: 1100px;
+    margin: 0 auto;
+  }
 `
 
-const ProgramCard = styled.div`
+const ProgramCard = styled.div<{ $featured?: boolean }>`
   position: relative;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  ${surface}
+  border: 1px solid
+    ${({ theme, $featured }) =>
+      $featured ? alpha(theme.colors.accent, 0.35) : 'rgba(255, 255, 255, 0.1)'};
   border-radius: 16px;
   padding: 24px 20px;
   display: flex;
   flex-direction: column;
   gap: 14px;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 
   @media (min-width: 768px) {
     border-radius: 20px;
     padding: 40px 32px;
     gap: 20px;
+
+    ${({ theme, $featured }) =>
+      $featured && `box-shadow: 0 24px 60px -28px ${alpha(theme.colors.accent, 0.35)};`}
+
+    &:hover {
+      transform: translateY(-6px);
+      border-color: ${({ theme, $featured }) =>
+        $featured ? alpha(theme.colors.accent, 0.55) : 'rgba(255, 255, 255, 0.22)'};
+      box-shadow: ${({ theme, $featured }) =>
+        $featured
+          ? `0 30px 70px -28px ${alpha(theme.colors.accent, 0.55)}`
+          : '0 24px 50px -28px rgba(0, 0, 0, 0.6)'};
+    }
   }
 `
 
@@ -195,15 +216,7 @@ const FeatureItem = styled.li`
 `
 
 const AccentCta = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 14px 24px;
-  margin-top: auto;
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.size.sm};
-  font-weight: ${({ theme }) => theme.typography.weight.semibold};
+  ${cardCtaBase}
   background-color: ${({ theme }) => theme.colors.accent};
   color: ${({ theme }) => theme.colors.accentText};
   border: none;
@@ -211,27 +224,15 @@ const AccentCta = styled.button`
   cursor: pointer;
   transition: transform 0.15s, filter 0.15s;
 
-  @media (min-width: 768px) {
-    font-size: ${({ theme }) => theme.typography.size.base};
-    padding: 16px 24px;
-    border-radius: 12px;
-  }
+  ${cardCtaDesktop}
 
   &:hover { transform: translateY(-2px); filter: brightness(1.06); }
   &:active { transform: translateY(0); }
-  &:focus-visible { outline: 2px solid ${({ theme }) => theme.colors.accent}; outline-offset: 2px; }
+  ${focusRing('accent')}
 `
 
 const GhostCta = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 14px 24px;
-  margin-top: auto;
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.size.sm};
-  font-weight: ${({ theme }) => theme.typography.weight.semibold};
+  ${cardCtaBase}
   background: transparent;
   color: ${({ theme }) => theme.colors.text};
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -239,15 +240,11 @@ const GhostCta = styled.button`
   cursor: pointer;
   transition: transform 0.15s, background-color 0.2s, border-color 0.2s;
 
-  @media (min-width: 768px) {
-    font-size: ${({ theme }) => theme.typography.size.base};
-    padding: 16px 24px;
-    border-radius: 12px;
-  }
+  ${cardCtaDesktop}
 
   &:hover { background: rgba(255, 255, 255, 0.06); border-color: rgba(255, 255, 255, 0.35); transform: translateY(-2px); }
   &:active { transform: translateY(0); }
-  &:focus-visible { outline: 2px solid ${({ theme }) => theme.colors.text}; outline-offset: 2px; }
+  ${focusRing('text')}
 `
 
 const TURMA_FEATURES = [
@@ -268,75 +265,77 @@ const PERSONAL_FEATURES = [
 ] as const
 
 export function ProgramsSection() {
-  const handleReserva = () => {
-    window.open(links.whatsappReserva.href, '_blank', 'noopener,noreferrer')
-  }
-  const handlePersonal = () => {
-    window.open(links.whatsappPersonal.href, '_blank', 'noopener,noreferrer')
-  }
+  const handleReserva = () => openExternal(links.whatsappReserva.href)
+  const handlePersonal = () => openExternal(links.whatsappPersonal.href)
 
   const [amount, suffix] = turmaFemininaPrice.split('/')
 
   return (
     <Section id="programas" aria-labelledby="programas-title">
       <Container>
-        <SectionTitle
-          title="Programas"
-          subtitle="Escolha o formato ideal para sua rotina."
-          id="programas-title"
-        />
+        <Reveal>
+          <SectionTitle
+            title="Programas"
+            subtitle="Escolha o formato ideal para sua rotina."
+            id="programas-title"
+          />
+        </Reveal>
         <Grid>
-          <ProgramCard>
-            <PopularBadge>Mais popular</PopularBadge>
-            <ProgramTitle>Turma Feminina</ProgramTitle>
-            <ProgramDesc>
-              Aulas em grupo exclusivas para mulheres, com foco em técnica, condicionamento e empoderamento.
-            </ProgramDesc>
-            <PriceBlock>
-              <PriceRow>
-                <PriceValue>{amount}</PriceValue>
-                <PriceSuffix>/{suffix}</PriceSuffix>
-              </PriceRow>
-              <PriceNote>2 aulas por semana</PriceNote>
-            </PriceBlock>
-            <FeatureList>
-              {TURMA_FEATURES.map((f) => (
-                <FeatureItem key={f}>
-                  <Check size={14} strokeWidth={3} aria-hidden />
-                  {f}
-                </FeatureItem>
-              ))}
-            </FeatureList>
-            <AccentCta type="button" onClick={handleReserva} aria-label={links.whatsappReserva.ariaLabel}>
-              Reservar vaga
-            </AccentCta>
-          </ProgramCard>
+          <Reveal delay={0}>
+            <ProgramCard $featured>
+              <PopularBadge>Mais popular</PopularBadge>
+              <ProgramTitle>Turma Feminina</ProgramTitle>
+              <ProgramDesc>
+                Aulas em grupo exclusivas para mulheres, com foco em técnica, condicionamento e empoderamento.
+              </ProgramDesc>
+              <PriceBlock>
+                <PriceRow>
+                  <PriceValue>{amount}</PriceValue>
+                  <PriceSuffix>/{suffix}</PriceSuffix>
+                </PriceRow>
+                <PriceNote>2 aulas por semana</PriceNote>
+              </PriceBlock>
+              <FeatureList>
+                {TURMA_FEATURES.map((f) => (
+                  <FeatureItem key={f}>
+                    <Check size={14} strokeWidth={3} aria-hidden />
+                    {f}
+                  </FeatureItem>
+                ))}
+              </FeatureList>
+              <AccentCta type="button" onClick={handleReserva} aria-label={links.whatsappReserva.ariaLabel}>
+                Reservar vaga
+              </AccentCta>
+            </ProgramCard>
+          </Reveal>
 
-          <ProgramCard>
-            <ProgramTitle>Personal</ProgramTitle>
-            <ProgramDesc>
-              Treino individual 100% personalizado para seus objetivos, com atenção exclusiva e progressão acelerada.
-            </ProgramDesc>
-            <PlanTable>
-              {personalPlans.map((p) => (
-                <PlanRow key={p.sessions}>
-                  <span>{p.sessions}</span>
-                  <PlanPrice>{p.price}</PlanPrice>
-                </PlanRow>
-              ))}
-            </PlanTable>
-            <FeatureList>
-              {PERSONAL_FEATURES.map((f) => (
-                <FeatureItem key={f}>
-                  <Check size={14} strokeWidth={3} aria-hidden />
-                  {f}
-                </FeatureItem>
-              ))}
-            </FeatureList>
-            <GhostCta type="button" onClick={handlePersonal} aria-label={links.whatsappPersonal.ariaLabel}>
-              Agendar avaliação
-            </GhostCta>
-          </ProgramCard>
+          <Reveal delay={150}>
+            <ProgramCard>
+              <ProgramTitle>Personal</ProgramTitle>
+              <ProgramDesc>
+                Treino individual 100% personalizado para seus objetivos, com atenção exclusiva e progressão acelerada.
+              </ProgramDesc>
+              <PlanTable>
+                {personalPlans.map((p) => (
+                  <PlanRow key={p.sessions}>
+                    <span>{p.sessions}</span>
+                    <PlanPrice>{p.price}</PlanPrice>
+                  </PlanRow>
+                ))}
+              </PlanTable>
+              <FeatureList>
+                {PERSONAL_FEATURES.map((f) => (
+                  <FeatureItem key={f}>
+                    <Check size={14} strokeWidth={3} aria-hidden />
+                    {f}
+                  </FeatureItem>
+                ))}
+              </FeatureList>
+              <GhostCta type="button" onClick={handlePersonal} aria-label={links.whatsappPersonal.ariaLabel}>
+                Agendar avaliação
+              </GhostCta>
+            </ProgramCard>
+          </Reveal>
         </Grid>
       </Container>
     </Section>

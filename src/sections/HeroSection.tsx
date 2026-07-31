@@ -1,9 +1,13 @@
 import styled, { keyframes } from 'styled-components'
-import { WhatsAppIcon } from '../components/icons/WhatsAppIcon'
+import { WhatsAppIcon } from '../components/icons'
 
-import { heroMain } from '../assets/hero'
+import { openExternal, scrollToId } from '../lib/browser'
+import { alpha } from '../styles/color'
+import { focusRing, inlineCtaBase, inlineCtaDesktop } from '../styles/mixins'
 import { links, SLOGAN } from '../data/site'
 import { kpis, heroChips } from '../data/metrics'
+
+const HERO_FALLBACK = '/hero.webp'
 
 const fadeInUp = keyframes`
   from { opacity: 0; transform: translateY(24px); }
@@ -12,7 +16,8 @@ const fadeInUp = keyframes`
 
 const HeroWrap = styled.section`
   position: relative;
-  min-height: 100dvh;
+  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -20,6 +25,7 @@ const HeroWrap = styled.section`
   text-align: center;
   overflow: hidden;
   background-color: ${({ theme }) => theme.colors.background};
+  contain: layout paint;
 
   @media (min-width: 768px) {
     justify-content: center;
@@ -30,10 +36,16 @@ const HeroWrap = styled.section`
   }
 `
 
-const HeroBg = styled.img`
+const HeroPicture = styled.picture`
   position: absolute;
   inset: 0;
   z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+`
+
+const HeroBg = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -52,11 +64,39 @@ const HeroOverlay = styled.div`
   );
 
   @media (min-width: 768px) {
-    background: linear-gradient(
-      135deg,
-      rgba(10, 10, 10, 0.72) 0%,
-      rgba(10, 10, 10, 0.45) 100%
+    background:
+      radial-gradient(
+        circle at 75% 65%,
+        ${({ theme }) => alpha(theme.colors.accent, 0.1)} 0%,
+        ${({ theme }) => alpha(theme.colors.accent, 0)} 45%
+      ),
+      linear-gradient(
+        135deg,
+        rgba(10, 10, 10, 0.78) 0%,
+        rgba(10, 10, 10, 0.42) 100%
+      );
+  }
+`
+
+const HeroGlow = styled.div`
+  display: none;
+
+  @media (min-width: 1024px) {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    bottom: -160px;
+    left: -120px;
+    width: 520px;
+    height: 520px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      ${({ theme }) => alpha(theme.colors.brand, 0.35)} 0%,
+      ${({ theme }) => alpha(theme.colors.brand, 0)} 65%
     );
+    filter: blur(40px);
+    pointer-events: none;
   }
 `
 
@@ -71,6 +111,10 @@ const HeroContent = styled.div`
   @media (min-width: 768px) {
     margin-left: 0;
     margin-right: auto;
+  }
+
+  @media (min-width: 1024px) {
+    max-width: 56rem;
   }
 `
 
@@ -166,6 +210,11 @@ const KpiValue = styled.span`
   font-weight: ${({ theme }) => theme.typography.weight.bold};
   color: ${({ theme }) => theme.colors.accent};
   line-height: 1.1;
+  letter-spacing: -0.01em;
+
+  @media (min-width: 1024px) {
+    font-size: 2.5rem;
+  }
 `
 
 const KpiLabel = styled.span`
@@ -193,41 +242,28 @@ const CtaGroup = styled.div`
 `
 
 const AccentBtn = styled.button`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 24px;
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.size.sm};
-  font-weight: ${({ theme }) => theme.typography.weight.semibold};
+  ${inlineCtaBase}
   background-color: ${({ theme }) => theme.colors.accent};
   color: ${({ theme }) => theme.colors.accentText};
   border: none;
   border-radius: ${({ theme }) => theme.radius.md};
   cursor: pointer;
-  transition: transform 0.15s, filter 0.15s;
+  box-shadow: 0 6px 24px ${({ theme }) => alpha(theme.colors.accent, 0.18)};
+  transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.25s ease;
 
-  @media (min-width: 768px) {
-    padding: 14px 28px;
-    font-size: ${({ theme }) => theme.typography.size.base};
-    width: auto;
+  ${inlineCtaDesktop}
+
+  &:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+    box-shadow: 0 10px 32px ${({ theme }) => alpha(theme.colors.accent, 0.32)};
   }
-
-  &:hover { transform: translateY(-2px); filter: brightness(1.08); }
-  &:active { transform: translateY(0); }
-  &:focus-visible { outline: 2px solid ${({ theme }) => theme.colors.accent}; outline-offset: 2px; }
+  &:active { transform: translateY(0); box-shadow: 0 4px 16px ${({ theme }) => alpha(theme.colors.accent, 0.18)}; }
+  ${focusRing('accent')}
 `
 
 const DarkBtn = styled.button`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 24px;
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.size.sm};
-  font-weight: ${({ theme }) => theme.typography.weight.semibold};
+  ${inlineCtaBase}
   background-color: rgba(255, 255, 255, 0.08);
   color: ${({ theme }) => theme.colors.text};
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -235,29 +271,43 @@ const DarkBtn = styled.button`
   cursor: pointer;
   transition: transform 0.15s, background-color 0.2s, border-color 0.2s;
 
-  @media (min-width: 768px) {
-    padding: 14px 28px;
-    font-size: ${({ theme }) => theme.typography.size.base};
-    width: auto;
-  }
+  ${inlineCtaDesktop}
 
   &:hover { background-color: rgba(255, 255, 255, 0.14); border-color: rgba(255, 255, 255, 0.3); transform: translateY(-2px); }
   &:active { transform: translateY(0); }
-  &:focus-visible { outline: 2px solid ${({ theme }) => theme.colors.text}; outline-offset: 2px; }
+  ${focusRing('text')}
 `
 
 export function HeroSection() {
-  const handleCta = () => {
-    window.open(links.whatsapp.href, '_blank', 'noopener,noreferrer')
-  }
-  const handleVerAgenda = () => {
-    document.getElementById('agenda')?.scrollIntoView({ behavior: 'smooth' })
-  }
+  const handleCta = () => openExternal(links.whatsapp.href)
+  const handleVerAgenda = () => scrollToId('agenda')
 
   return (
     <HeroWrap id="hero">
-      <HeroBg src={heroMain} alt="" aria-hidden fetchPriority="high" loading="eager" decoding="async" width={1920} height={1080} />
+      <HeroPicture>
+        <source
+          type="image/avif"
+          srcSet="/hero/hero-768.avif 768w, /hero/hero-1280.avif 1280w"
+          sizes="(min-width: 1280px) 1280px, 100vw"
+        />
+        <source
+          type="image/webp"
+          srcSet="/hero/hero-768.webp 768w, /hero/hero-1280.webp 1280w"
+          sizes="(min-width: 1280px) 1280px, 100vw"
+        />
+        <HeroBg
+          src={HERO_FALLBACK}
+          alt=""
+          aria-hidden
+          fetchPriority="high"
+          loading="eager"
+          decoding="async"
+          width={1536}
+          height={1024}
+        />
+      </HeroPicture>
       <HeroOverlay aria-hidden />
+      <HeroGlow aria-hidden />
       <HeroContent>
         <HeroTitle>Karol Cascelli</HeroTitle>
         <HeroSub>Muay Thai &amp; Personal</HeroSub>

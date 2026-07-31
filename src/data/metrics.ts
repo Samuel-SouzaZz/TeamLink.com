@@ -1,7 +1,7 @@
 export const kpis = [
-  { value: '+120', label: 'Alunas' },
-  { value: '10 anos', label: 'De tatame' },
+  { value: '12 anos', label: 'De tatame' },
   { value: '2x/sem', label: 'Aulas' },
+  { value: 'Team Link', label: 'Equipe' },
 ] as const
 
 export const schedule = [
@@ -12,9 +12,10 @@ export const schedule = [
 export const personalNote = 'Personal training: horários flexíveis mediante agendamento'
 
 export const timeline = [
-  { year: '2015', title: 'Início no Muay Thai', description: 'Primeiros passos no tatame e o começo de uma jornada de disciplina e paixão.' },
-  { year: '2018', title: 'Team Link', description: 'Integra a equipe Team Link, referência em artes marciais no Brasil.' },
-  { year: '2024', title: 'Turma Feminina', description: 'Lança a turma exclusiva para mulheres, criando um espaço de acolhimento e evolução.' },
+  { year: '2014', title: 'Início no Muay Thai', description: 'Primeiros passos no tatame e o começo de uma jornada de disciplina e paixão.' },
+  { year: '2015', title: 'Team Link', description: 'Entra para a equipe Team Link com o professor Victor, referência em artes marciais no Brasil.' },
+  { year: '2023', title: 'Turma Feminina', description: 'Lança a turma exclusiva para mulheres, criando um espaço de acolhimento e evolução.' },
+  { year: '2026', title: 'O Retorno', description: 'Após uma pausa, retorna com força total ao tatame e à turma feminina.' },
 ] as const
 
 export const personalPlans = [
@@ -25,4 +26,4 @@ export const personalPlans = [
 
 export const turmaFemininaPrice = 'R$ 100/mês'
 
-export const heroChips = ['Turma Feminina', 'Desde 2015', 'Team Link', 'Evolução'] as const
+export const heroChips = ['Turma Feminina', 'Desde 2014', 'Team Link', 'Evolução'] as const

@@ -1,15 +1,15 @@
 import styled from 'styled-components'
-import { Container, SectionTitle } from '../components/ui'
-import { sobreImage } from '../assets/Sobre'
+import { Container, SectionTitle, Reveal } from '../components/ui'
+import { alpha } from '../styles/color'
+import { sectionPadding } from '../styles/mixins'
 import { timeline } from '../data/metrics'
 
-const Section = styled.section`
-  padding: 40px 16px;
-  background-color: ${({ theme }) => theme.colors.background};
+const SOBRE_WEBP = '/sobre.webp'
+const SOBRE_AVIF = '/sobre.avif'
 
-  @media (min-width: 768px) {
-    padding: ${({ theme }) => theme.spacing['2xl']} ${({ theme }) => theme.spacing.md};
-  }
+const Section = styled.section`
+  ${sectionPadding}
+  background-color: ${({ theme }) => theme.colors.background};
 `
 
 const Grid = styled.div`
@@ -69,8 +69,14 @@ const TimelineDot = styled.div`
   width: 1.25rem;
   height: 1.25rem;
   border-radius: 50%;
-  background: ${({ theme }) => theme.colors.brand};
+  background: linear-gradient(
+    135deg,
+    ${({ theme }) => theme.colors.brand},
+    ${({ theme }) => theme.colors.brandLight}
+  );
   border: 3px solid ${({ theme }) => theme.colors.background};
+  box-shadow: 0 0 0 2px ${({ theme }) => alpha(theme.colors.brandLight, 0.25)},
+    0 0 16px -2px ${({ theme }) => alpha(theme.colors.brand, 0.6)};
   z-index: 1;
 
   @media (min-width: 768px) {
@@ -131,9 +137,24 @@ const ImageWrapper = styled.div`
   @media (min-width: 1024px) {
     order: 2;
     max-width: 100%;
-    max-height: 520px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    max-height: 560px;
+    box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.6);
   }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+`
+
+const Picture = styled.picture`
+  display: block;
+  width: 100%;
+  height: 100%;
 `
 
 const Image = styled.img`
@@ -148,32 +169,41 @@ export function HistorySection() {
   return (
     <Section id="historia" aria-labelledby="historia-title">
       <Container>
-        <SectionTitle
-          title="A História da Karol"
-          subtitle="Do primeiro treino à turma feminina: uma trajetória de evolução."
-          id="historia-title"
-        />
+        <Reveal>
+          <SectionTitle
+            title="A História da Karol"
+            subtitle="Do primeiro treino à turma feminina: uma trajetória de evolução."
+            id="historia-title"
+          />
+        </Reveal>
         <Grid>
           <TimelineWrap>
-            {timeline.map((event) => (
-              <TimelineItem key={event.year}>
-                <TimelineDot aria-hidden />
-                <TimelineYear>{event.year}</TimelineYear>
-                <TimelineTitle>{event.title}</TimelineTitle>
-                <TimelineDesc>{event.description}</TimelineDesc>
-              </TimelineItem>
+            {timeline.map((event, i) => (
+              <Reveal key={event.year} delay={i * 150}>
+                <TimelineItem>
+                  <TimelineDot aria-hidden />
+                  <TimelineYear>{event.year}</TimelineYear>
+                  <TimelineTitle>{event.title}</TimelineTitle>
+                  <TimelineDesc>{event.description}</TimelineDesc>
+                </TimelineItem>
+              </Reveal>
             ))}
           </TimelineWrap>
-          <ImageWrapper>
-            <Image
-              src={sobreImage}
-              alt="Karol Cascelli — instrutora de Muay Thai"
-              loading="lazy"
-              width={600}
-              height={800}
-              decoding="async"
-            />
-          </ImageWrapper>
+          <Reveal direction="right" delay={100}>
+            <ImageWrapper>
+              <Picture>
+                <source type="image/avif" srcSet={SOBRE_AVIF} />
+                <Image
+                  src={SOBRE_WEBP}
+                  alt="Karol Cascelli — instrutora de Muay Thai"
+                  loading="lazy"
+                  width={800}
+                  height={1200}
+                  decoding="async"
+                />
+              </Picture>
+            </ImageWrapper>
+          </Reveal>
         </Grid>
       </Container>
     </Section>

@@ -18,6 +18,7 @@ import 'yet-another-react-lightbox/plugins/captions.css'
 import 'yet-another-react-lightbox/plugins/thumbnails.css'
 
 import { createGlobalStyle } from 'styled-components'
+import { alpha } from '../styles/color'
 import type { GalleryItem } from '../types/gallery'
 
 /* ── Overrides de CSS (variáveis do YARL) ───────────────────────────── */
@@ -86,7 +87,7 @@ const YarlTheme = createGlobalStyle`
       transform: scale(1.07);
     }
     &:focus-visible {
-      outline: 2px solid #A1122B;
+      outline: 2px solid ${({ theme }) => theme.colors.brand};
       outline-offset: 2px;
     }
   }
@@ -141,9 +142,9 @@ const YarlTheme = createGlobalStyle`
     opacity: 0.8;
   }
   .yarl__thumbnails_thumbnail_active {
-    border-color: #A1122B !important;
+    border-color: ${({ theme }) => theme.colors.brand} !important;
     opacity: 1;
-    box-shadow: 0 0 0 2px rgba(161, 18, 43, 0.38);
+    box-shadow: 0 0 0 2px ${({ theme }) => alpha(theme.colors.brand, 0.38)};
   }
 `
 

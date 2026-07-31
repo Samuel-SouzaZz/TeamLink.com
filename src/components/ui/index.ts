@@ -1,3 +1,5 @@
 export { Container } from './Container'
 export { SectionTitle } from './SectionTitle'
 export type { SectionTitleProps } from './SectionTitle'
+export { Reveal } from './Reveal'
+export type { RevealProps, RevealDirection } from './Reveal'

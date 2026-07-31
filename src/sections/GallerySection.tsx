@@ -1,12 +1,15 @@
-import { useState, lazy, Suspense } from 'react'
+import { useRef, useState, lazy, Suspense } from 'react'
 import styled from 'styled-components'
+import { ZoomIn } from 'lucide-react'
 
-import { Container, SectionTitle } from '../components/ui'
+import { Container, SectionTitle, Reveal } from '../components/ui'
+import { focusRing } from '../styles/mixins'
 import { galleryItems } from '../data/gallery'
 
-const LightboxModal = lazy(() =>
+const loadLightbox = () =>
   import('../components/LightboxModal').then((m) => ({ default: m.LightboxModal }))
-)
+
+const LightboxModal = lazy(loadLightbox)
 
 const Section = styled.section`
   padding: 40px 16px;
@@ -31,6 +34,7 @@ const Grid = styled.ul`
   }
   @media (min-width: 1024px) {
     grid-template-columns: repeat(4, 1fr);
+    gap: ${({ theme }) => theme.spacing.lg};
   }
 `
 
@@ -53,7 +57,7 @@ const ImageButton = styled.button`
     border-radius: ${({ theme }) => theme.radius.lg};
   }
 
-  &:focus-visible { outline: 2px solid ${({ theme }) => theme.colors.brand}; outline-offset: 2px; }
+  ${focusRing('brand')}
 `
 
 const ImageInner = styled.span`
@@ -78,36 +82,76 @@ const Thumb = styled.img`
 const ThumbOverlay = styled.span`
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 50%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${({ theme }) => theme.colors.text};
   opacity: 0;
   transition: opacity 0.25s;
   @media (prefers-reduced-motion: reduce) { transition: none; }
   ${ImageButton}:hover & { opacity: 1; }
+
+  svg {
+    background: rgba(10, 10, 10, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+    padding: 8px;
+    width: 36px;
+    height: 36px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
 `
 
 export function GallerySection() {
   const [lightboxIndex, setLightboxIndex] = useState(-1)
+  const prefetched = useRef(false)
+
+  // Baixa o chunk do lightbox na primeira intenção de clique, não na abertura.
+  const prefetchLightbox = () => {
+    if (prefetched.current) return
+    prefetched.current = true
+    loadLightbox()
+  }
 
   return (
     <Section id="galeria" aria-labelledby="gallery-heading">
       <Container>
-        <SectionTitle title="Galeria" id="gallery-heading" />
-        <Grid>
-          {galleryItems.map((item, idx) => (
-            <GridItem key={item.id}>
-              <ImageButton
-                type="button"
-                aria-label={`Abrir foto: ${item.alt}`}
-                onClick={() => setLightboxIndex(idx)}
-              >
-                <ImageInner>
-                  <Thumb src={item.src} alt={item.alt} loading="lazy" decoding="async" width={400} height={400} />
-                  <ThumbOverlay aria-hidden />
-                </ImageInner>
-              </ImageButton>
-            </GridItem>
-          ))}
-        </Grid>
+        <Reveal>
+          <SectionTitle
+            title="Galeria"
+            subtitle="Momentos da nossa turma no tatame."
+            id="gallery-heading"
+          />
+        </Reveal>
+        <Reveal>
+          <Grid>
+            {galleryItems.map((item, idx) => (
+              <GridItem key={item.id}>
+                <ImageButton
+                  type="button"
+                  aria-label={`Abrir foto: ${item.alt}`}
+                  onClick={() => setLightboxIndex(idx)}
+                  onPointerEnter={prefetchLightbox}
+                  onFocus={prefetchLightbox}
+                  onTouchStart={prefetchLightbox}
+                >
+                  <ImageInner>
+                    <Thumb src={item.src} alt={item.alt} loading="lazy" decoding="async" width={400} height={400} />
+                    <ThumbOverlay aria-hidden>
+                      <ZoomIn strokeWidth={2} />
+                    </ThumbOverlay>
+                  </ImageInner>
+                </ImageButton>
+              </GridItem>
+            ))}
+          </Grid>
+        </Reveal>
       </Container>
 
       {lightboxIndex >= 0 && (

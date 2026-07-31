@@ -10,4 +10,14 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'styled-components', '@radix-ui/react-dialog'],
+          icons: ['lucide-react'],
+        },
+      },
+    },
+  },
 })

@@ -1,10 +1,10 @@
-import type { SVGProps } from 'react'
+import type { IconProps } from './types'
 
 /**
  * Ícone TikTok (estilo outline, compatível com Lucide).
  * Baseado no símbolo oficial do TikTok.
  */
-export function TiktokIcon({ size = 24, strokeWidth = 2, ...props }: SVGProps<SVGSVGElement> & { size?: number; strokeWidth?: number }) {
+export function TiktokIcon({ size = 24, strokeWidth = 2, ...props }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

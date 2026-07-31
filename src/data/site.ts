@@ -5,7 +5,7 @@ export const SLOGAN = 'Sua melhor versão começa no tatame.'
 export const links = {
   whatsapp: {
     label: 'WhatsApp',
-    href: 'https://wa.me/5532984583098?text=Oi!%20Gostaria%20de%20agendar%20uma%20aula%20experimental%20de%20Muay%20Thai.',
+    href: 'https://wa.me/5532984583098?text=Oi!%20Gostaria%20de%20agendar%20minha%20aula%20experimental%20gratuita%20de%20Muay%20Thai.',
     ariaLabel: 'Abrir conversa no WhatsApp',
   },
   whatsappReserva: {
@@ -15,7 +15,7 @@ export const links = {
   },
   whatsappPersonal: {
     label: 'Agendar avaliação',
-    href: 'https://wa.me/5532983098?text=Quero%20agendar%20uma%20avaliação%20para%20personal%20training!',
+    href: 'https://wa.me/5532984583098?text=Quero%20agendar%20uma%20avaliação%20para%20personal%20training!',
     ariaLabel: 'Agendar avaliação para personal training pelo WhatsApp',
   },
   instagram: {
@@ -30,7 +30,7 @@ export const links = {
   },
   maps: {
     label: 'Abrir no Maps',
-    href: 'https://www.google.com/maps/search/?api=1&query=Rua+Virgínia+Napoleão+39+Napoleão+Juiz+de+Fora+MG',
+    href: 'https://www.google.com/maps/search/?api=1&query=Rua+Virgínia+Napoleão+39+Napoleão+Muriaé+MG',
     ariaLabel: 'Abrir localização no Google Maps',
   },
 } as const
@@ -40,6 +40,7 @@ export const navItems: NavItem[] = [
   { label: 'Agenda', href: '#agenda' },
   { label: 'História', href: '#historia' },
   { label: 'Depoimentos', href: '#depoimentos' },
+  { label: 'Galeria', href: '#galeria' },
 ]
 
-export const ADDRESS = 'Rua Virgínia Napoleão, nº 39, Napoleão — 2º andar, Juiz de Fora/MG'
+export const ADDRESS = 'Rua Virgínia Napoleão, nº 39, Napoleão — 2º andar, Muriaé/MG'

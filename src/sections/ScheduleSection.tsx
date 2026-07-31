@@ -1,31 +1,15 @@
 import styled from 'styled-components'
 import { CalendarDays, MapPin, Clock } from 'lucide-react'
-import { Container } from '../components/ui'
+import { Container, SectionTitle, Reveal } from '../components/ui'
+import { openExternal } from '../lib/browser'
+import { blockCtaBase, ctaTypography, focusRing, sectionPadding, surface } from '../styles/mixins'
 import { links } from '../data/site'
 import { schedule, personalNote } from '../data/metrics'
 import turmaFoto from '../assets/gallery/turma-feminina.webp'
 
 const Section = styled.section`
-  padding: 40px 16px;
+  ${sectionPadding}
   background-color: ${({ theme }) => theme.colors.background};
-
-  @media (min-width: 768px) {
-    padding: ${({ theme }) => theme.spacing['2xl']} ${({ theme }) => theme.spacing.md};
-  }
-`
-
-const SectionHeading = styled.h2`
-  text-align: center;
-  margin: 0 0 24px;
-  font-family: ${({ theme }) => theme.typography.fontHeading};
-  font-size: clamp(1.5rem, 5vw, 2.5rem);
-  font-weight: ${({ theme }) => theme.typography.weight.bold};
-  color: ${({ theme }) => theme.colors.text};
-  font-style: italic;
-
-  @media (min-width: 768px) {
-    margin-bottom: ${({ theme }) => theme.spacing.xl};
-  }
 `
 
 const Grid = styled.div`
@@ -76,12 +60,23 @@ const BlockTitle = styled.h3`
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 10px;
+  ${surface}
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
   overflow: hidden;
 
   @media (min-width: 768px) {
-    border-radius: 12px;
+    border-radius: 14px;
+  }
+
+  tbody tr {
+    transition: background-color 0.2s ease;
+  }
+
+  @media (min-width: 1024px) {
+    tbody tr:hover {
+      background-color: rgba(255, 255, 255, 0.04);
+    }
   }
 `
 
@@ -156,11 +151,13 @@ const LocationBlock = styled.div`
 `
 
 const LocationImageWrap = styled.div`
+  position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 40px -16px rgba(0, 0, 0, 0.6);
 
   @media (min-width: 768px) {
     aspect-ratio: 16 / 10;
@@ -201,14 +198,9 @@ const LocationAddress = styled.p`
 `
 
 const MapsBtn = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+  ${blockCtaBase}
   padding: 12px 20px;
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.size.sm};
-  font-weight: ${({ theme }) => theme.typography.weight.semibold};
+  ${ctaTypography}
   background: transparent;
   color: ${({ theme }) => theme.colors.text};
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -223,74 +215,82 @@ const MapsBtn = styled.button`
   }
 
   &:hover { background: rgba(255, 255, 255, 0.06); border-color: rgba(255, 255, 255, 0.3); transform: translateY(-2px); }
-  &:focus-visible { outline: 2px solid ${({ theme }) => theme.colors.text}; outline-offset: 2px; }
+  ${focusRing('text')}
 `
 
 export function ScheduleSection() {
-  const handleMaps = () => {
-    window.open(links.maps.href, '_blank', 'noopener,noreferrer')
-  }
+  const handleMaps = () => openExternal(links.maps.href)
 
   return (
     <Section id="agenda" aria-labelledby="agenda-title">
       <Container>
-        <SectionHeading id="agenda-title">Agenda &amp; Local</SectionHeading>
+        <Reveal>
+          <SectionTitle
+            title="Agenda & Local"
+            subtitle="Confira os horários e venha conhecer o espaço."
+            id="agenda-title"
+          />
+        </Reveal>
         <Grid>
-          <ScheduleBlock>
-            <BlockHeader>
-              <HeaderIcon aria-hidden><CalendarDays size={20} strokeWidth={2} /></HeaderIcon>
-              <BlockTitle>Horários das turmas</BlockTitle>
-            </BlockHeader>
-            <Table>
-              <thead>
-                <tr>
-                  <Th>Dia</Th>
-                  <Th>Horário</Th>
-                  <Th>Turma</Th>
-                </tr>
-              </thead>
-              <tbody>
-                {schedule.map((row) => (
-                  <tr key={row.day}>
-                    <Td>{row.day}</Td>
-                    <Td>{row.time}</Td>
-                    <Td><TurmaBadge>{row.class}</TurmaBadge></Td>
+          <Reveal>
+            <ScheduleBlock>
+              <BlockHeader>
+                <HeaderIcon aria-hidden><CalendarDays size={20} strokeWidth={2} /></HeaderIcon>
+                <BlockTitle>Horários das turmas</BlockTitle>
+              </BlockHeader>
+              <Table>
+                <thead>
+                  <tr>
+                    <Th>Dia</Th>
+                    <Th>Horário</Th>
+                    <Th>Turma</Th>
                   </tr>
-                ))}
-              </tbody>
-            </Table>
-            <Note>
-              <Clock size={13} strokeWidth={2} aria-hidden />
-              {personalNote}
-            </Note>
-          </ScheduleBlock>
+                </thead>
+                <tbody>
+                  {schedule.map((row) => (
+                    <tr key={row.day}>
+                      <Td>{row.day}</Td>
+                      <Td>{row.time}</Td>
+                      <Td><TurmaBadge>{row.class}</TurmaBadge></Td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+              <Note>
+                <Clock size={13} strokeWidth={2} aria-hidden />
+                {personalNote}
+              </Note>
+            </ScheduleBlock>
+          </Reveal>
 
-          <LocationBlock>
-            <BlockHeader>
-              <HeaderIcon aria-hidden><MapPin size={20} strokeWidth={2} /></HeaderIcon>
-              <BlockTitle>Onde treinamos</BlockTitle>
-            </BlockHeader>
-            <LocationImageWrap>
-              <LocationImage
-                src={turmaFoto}
-                alt="Turma feminina de Muay Thai na Team Link"
-                loading="lazy"
-                width={800}
-                height={500}
-                decoding="async"
-              />
-            </LocationImageWrap>
-            <div>
-              <LocationName>Team Link – Muay Thai</LocationName>
-              <LocationAddress>
-                Rua Virgínia Napoleão, nº 39, Napoleão — 2º andar<br />
-                Juiz de Fora, MG
-              </LocationAddress>
-            </div>
-            <MapsBtn type="button" onClick={handleMaps} aria-label={links.maps.ariaLabel}>
-              Abrir no Maps
-            </MapsBtn>
-          </LocationBlock>
+          <Reveal delay={150}>
+            <LocationBlock>
+              <BlockHeader>
+                <HeaderIcon aria-hidden><MapPin size={20} strokeWidth={2} /></HeaderIcon>
+                <BlockTitle>Onde treinamos</BlockTitle>
+              </BlockHeader>
+              <LocationImageWrap>
+                <LocationImage
+                  src={turmaFoto}
+                  alt="Turma feminina de Muay Thai na Team Link"
+                  loading="lazy"
+                  width={800}
+                  height={500}
+                  decoding="async"
+                />
+              </LocationImageWrap>
+              <div>
+                <LocationName>Team Link – Muay Thai</LocationName>
+                <LocationAddress>
+                  Rua Virgínia Napoleão, nº 39, Napoleão — 2º andar<br />
+                  Muriaé, MG
+                </LocationAddress>
+              </div>
+              <MapsBtn type="button" onClick={handleMaps} aria-label={links.maps.ariaLabel}>
+                Abrir no Maps
+              </MapsBtn>
+            </LocationBlock>
+          </Reveal>
         </Grid>
       </Container>
     </Section>
