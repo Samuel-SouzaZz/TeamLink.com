@@ -21,6 +21,12 @@ dist-ssr
 .env.development.local
 .env.test.local
 .env.production.local
+# O modelo é versionado de propósito: ele não contém valor nenhum.
+!.env.example
+
+# Supabase CLI (estado local, nunca versionado)
+supabase/.temp/
+supabase/.branches/
 
 # Chaves e certificados
 *.pem

@@ -30,7 +30,11 @@ const vite = await createServer({
 
 try {
   const { ServerStyleSheet, ThemeProvider } = await vite.ssrLoadModule('styled-components')
-  const { App } = await vite.ssrLoadModule('/src/App.tsx')
+  // Renderiza o que a rota `/` renderiza, e não `<App />`: desde que o portal
+  // entrou, `App` monta o RouterProvider, que depende de histórico do navegador
+  // e não faz sentido em SSR. O alvo desta comparação é a home institucional.
+  const { AppLayout } = await vite.ssrLoadModule('/src/layouts/AppLayout.tsx')
+  const { Home } = await vite.ssrLoadModule('/src/pages/Home.tsx')
   const { theme } = await vite.ssrLoadModule('/src/styles/theme.ts')
   const { GlobalStyle } = await vite.ssrLoadModule('/src/styles/GlobalStyle.ts')
 
@@ -41,7 +45,7 @@ try {
         ThemeProvider,
         { theme },
         React.createElement(GlobalStyle),
-        React.createElement(App),
+        React.createElement(AppLayout, null, React.createElement(Home)),
       ),
     ),
   )

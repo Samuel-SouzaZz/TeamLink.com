@@ -12,11 +12,16 @@ export const theme = {
     overlay: 'rgba(0, 0, 0, 0.6)',
     whatsapp: '#25D366',
     whatsappHover: '#20bd5a',
+    // Estados do portal de agendamento (assinaturas, presenças, agendamentos).
+    success: '#B4FF50',
+    warning: '#FFC94D',
+    danger: '#FF6B6B',
   },
   radius: {
     sm: '6px',
     md: '8px',
     lg: '12px',
+    xl: '16px',
     full: '9999px',
   },
   spacing: {
@@ -49,12 +54,17 @@ export const theme = {
   },
   zIndex: {
     cta: 40,
+    bottomNav: 45,
     navbar: 50,
     overlay: 60,
     drawer: 61,
   },
   layout: {
     navbarHeight: '3.5rem',
+    portalHeaderHeight: '3.5rem',
+    bottomNavHeight: '4rem',
+    /** Alvo mínimo de toque recomendado para acessibilidade. */
+    touchTarget: '44px',
   },
 } as const
 

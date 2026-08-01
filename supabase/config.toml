@@ -1,0 +1,53 @@
+project_id = "teamlink"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 200
+
+[db]
+port = 54322
+major_version = 17
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
+
+[studio]
+enabled = true
+port = 54323
+
+[inbucket]
+enabled = true
+port = 54324
+
+[auth]
+enabled = true
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["http://localhost:5173/login", "http://localhost:5173/ativar"]
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+
+# Não existe cadastro público: a aluna entra por convite da Karol.
+enable_signup = false
+enable_anonymous_sign_ins = false
+
+[auth.email]
+enable_signup = false
+enable_confirmations = true
+double_confirm_changes = true
+secure_password_change = true
+# Convites e recuperação expiram rápido: o link é credencial.
+otp_expiry = 3600
+
+# Injeta o papel no token. Sem este hook o claim `user_role` não existe e o
+# portal trata a sessão como sem papel — recusando o acesso em vez de adivinhar.
+[auth.hook.custom_access_token]
+enabled = true
+uri = "pg-functions://postgres/public/custom_access_token_hook"
+
+[edge_runtime]
+enabled = true
+policy = "oneshot"
